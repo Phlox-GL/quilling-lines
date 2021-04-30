@@ -81,35 +81,36 @@
                     :radius 5
         |gen-trail $ quote
           defn gen-trail (point) (echo "\"render event")
-            -> (range 20)
-              mapcat $ fn (r0)
-                &let
-                  ratio $ &/ r0 20
-                  concat
-                    []
-                      g :move-to $ ' 0 0
-                      g :line-style $ {}
-                        :color $ hslx
-                          &+ 200 $ rand 80
-                          &+ 50 $ rand 20
-                          &+ 50 $ rand 20
-                        :width 2
-                        :alpha 1
-                    -> (range 50)
-                      map $ fn (t0)
-                        &let
-                          theta $ &* &PI
-                            &- (&/ t0 50) 0.5
-                          ' :line-to $ c-times
-                            c-times
-                              c-times point $ ' (cos theta)
-                                &*
-                                  &+ 0.8 $ rand 0.02
-                                  sin theta
-                              [] (sqrt ratio) 0
-                            []
-                              pow (cos theta) 4
-                              , 0
+            let
+                hue $ rand 360
+                light $ &+ 30 (rand 10)
+              -> (range 30)
+                mapcat $ fn (r0)
+                  &let
+                    ratio $ &/ r0 30
+                    concat
+                      []
+                        g :move-to $ ' 0 0
+                        g :line-style $ {}
+                          :color $ hslx
+                            &+ hue $ rand 80
+                            &+ 50 $ rand 10
+                            &+ light $ rand 10
+                          :width 1
+                          :alpha 1
+                      -> (range 60)
+                        map $ fn (t0)
+                          &let
+                            theta $ &* &PI
+                              &- (&/ t0 60) 0.5
+                            ' :line-to $ c-times
+                              c-times
+                                c-times point $ ' (cos theta)
+                                  &* 0.66 $ sin theta
+                                [] (sqrt ratio) 0
+                              []
+                                pow (cos theta) 4
+                                , 0
         |half-pi $ quote
           def half-pi $ &/ &PI 2
         |c-times $ quote
