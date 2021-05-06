@@ -108,11 +108,13 @@
                 g :move-to $ ' 0 0
                 g :line-style $ {}
                   :color $ hslx
-                    &+ 100 $ rand 200
-                    &+ 50 $ rand 30
-                    &+ 30 $ rand 60
-                  :width 2
+                    &+ 200 $ rand 60
+                    &+ 40 $ rand 20
+                    &+ 64 $ rand 20
+                  :width $ &+ 1 (rand-int 6)
                   :alpha 0.8
+                  :join :round
+                  :cap :round
               -> points $ map-indexed
                 fn (idx p)
                   let
@@ -178,7 +180,7 @@
                 cursor $ :cursor states
                 state $ either (:data states)
                   merge
-                    {} $ :origin (' 300 200)
+                    {} $ :origin (' 600 400)
                     init-controls 60
                 angles $ :angles state
                 size $ :size state
@@ -211,10 +213,10 @@
                   container
                     {} $ :position (:origin state)
                     graphics $ {}
-                      :ops $ -> (range 60)
+                      :ops $ -> (range 30)
                         mapcat $ fn (idx)
                           stone-line
-                            sqrt $ &/ idx 60
+                            pow (&/ idx 30) 0.9
                             , points size
         |ratio-between $ quote
           defn ratio-between (ratio relative p)
@@ -236,8 +238,8 @@
                 v $ if (&>= idx size)
                   &+
                     nth acc $ &- idx size
-                    &+ 20 $ rand 50
-                  &+ high $ rand 40
+                    &+ 30 $ rand 30
+                  &+ high $ rand 16
               recur (conj acc v) size $ dec depth
       :proc $ quote ()
     |app.main $ {}
