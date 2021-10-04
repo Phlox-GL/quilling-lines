@@ -41,11 +41,11 @@
           [] respo-ui.core :as ui
           [] memof.alias :refer $ [] memof-call
           [] phlox.complex :as complex
+          "\"@calcit/std" :refer $ rand rand-int
       :defs $ {}
         |comp-container $ quote
           defn comp-container (store)
             ; println "\"Store" store $ :tab store
-            echo "\"triggered rendering"
             let
                 cursor $ []
                 states $ :states store

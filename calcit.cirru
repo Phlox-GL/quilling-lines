@@ -300,13 +300,6 @@
                 :type :expr
                 :at 1574442738592
                 :by |rJG4IHzWf
-              |u $ {}
-                :data $ {}
-                  |T $ {} (:text |echo) (:type :leaf) (:at 1619958185044) (:by |rJG4IHzWf)
-                  |j $ {} (:text "|\"triggered rendering") (:type :leaf) (:at 1619958188870) (:by |rJG4IHzWf)
-                :type :expr
-                :at 1619958182967
-                :by |rJG4IHzWf
               |v $ {}
                 :data $ {}
                   |D $ {} (:text |let) (:type :leaf) (:at 1583036827332) (:by |rJG4IHzWf)
@@ -2665,8 +2658,8 @@
                                             :data $ {}
                                               |xT $ {}
                                                 :data $ {}
-                                                  |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1632893669501) (:text |:alpha)
-                                                  |j $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1632893669501) (:text |0.5)
+                                                  |T $ {} (:text |:alpha) (:type :leaf) (:at 1632893669501) (:by |rJG4IHzWf)
+                                                  |j $ {} (:text |0.5) (:type :leaf) (:at 1632893669501) (:by |rJG4IHzWf)
                                                 :type :expr
                                                 :at 1632893669501
                                                 :by |rJG4IHzWf
@@ -3140,6 +3133,20 @@
                     |v $ {} (:text |complex) (:type :leaf) (:at 1619804188138) (:by |rJG4IHzWf)
                   :type :expr
                   :at 1619804184581
+                  :by |rJG4IHzWf
+                |yyv $ {}
+                  :data $ {}
+                    |T $ {} (:text "|\"@calcit/std") (:type :leaf) (:at 1633370724669) (:by |rJG4IHzWf)
+                    |j $ {} (:text |:refer) (:type :leaf) (:at 1633370725439) (:by |rJG4IHzWf)
+                    |r $ {}
+                      :data $ {}
+                        |T $ {} (:text |rand) (:type :leaf) (:at 1633370728010) (:by |rJG4IHzWf)
+                        |j $ {} (:text |rand-int) (:type :leaf) (:at 1633370729897) (:by |rJG4IHzWf)
+                      :type :expr
+                      :at 1633370725646
+                      :by |rJG4IHzWf
+                  :type :expr
+                  :at 1633370717994
                   :by |rJG4IHzWf
                 |yT $ {}
                   :data $ {}
