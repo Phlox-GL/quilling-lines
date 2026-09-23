@@ -1,6 +1,6 @@
 {
-  "packageManager": "yarn@4.12.0",
-"version": "0.4.7",
+  "packageManager": "yarn@4.18.0",
+  "version": "0.4.7",
   "dependencies": {
     "@calcit/procs": "^0.6.1",
     "@quamolit/phlox-utils": "^0.0.2",
@@ -11,5 +11,10 @@
   "devDependencies": {
     "@calcit/std": "^0.0.1",
     "vite": "^3.0.2"
+  },
+  "dependenciesMeta": {
+    "@cirru/parser.ts": {
+      "built": false
+    }
   }
 }
