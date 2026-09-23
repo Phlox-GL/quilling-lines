@@ -30,13 +30,20 @@ jobs:
         echo "$GITHUB_WORKSPACE/bin" >> "$GITHUB_PATH"
 
     - name: "prepare modules"
-      run: >
-        mkdir -p ~/.config/calcit/modules/ && cd ~/.config/calcit/modules/
-        && git clone https://github.com/calcit-lang/lilac.git
-        && git clone https://github.com/calcit-lang/memof.git
-        && git clone https://github.com/Phlox-GL/phlox.git
-        && git clone https://github.com/Respo/respo.calcit.git
-        && git clone https://github.com/Respo/respo-ui.calcit.git
+      run: |
+        set -euo pipefail
+        module_dir="$HOME/.config/calcit/modules"
+        mkdir -p "$module_dir"
+        git clone https://github.com/calcit-lang/lilac.git "$module_dir/lilac"
+        git -C "$module_dir/lilac" checkout --detach aff27ef3f450d83ecbb0b4537313b01f011af12e
+        git clone https://github.com/calcit-lang/memof.git "$module_dir/memof"
+        git -C "$module_dir/memof" checkout --detach 8689f9253ee306b349c0fb74d2bed9a9f7937c6f
+        git clone https://github.com/Phlox-GL/phlox.git "$module_dir/phlox"
+        git -C "$module_dir/phlox" checkout --detach c946287e035d46ce7270687c956601c23123f697
+        git clone https://github.com/Respo/respo.calcit.git "$module_dir/respo.calcit"
+        git -C "$module_dir/respo.calcit" checkout --detach 33945f86d9aadb1047a05882c846af4d70ecb0cf
+        git clone https://github.com/Respo/respo-ui.calcit.git "$module_dir/respo-ui.calcit"
+        git -C "$module_dir/respo-ui.calcit" checkout --detach fb5fff01c2264dfc209106d22423b7ed77be7ead
 
     - name: "compiles to js"
       run: |
