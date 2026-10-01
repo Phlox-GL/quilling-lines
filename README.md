@@ -10,6 +10,7 @@ Previews http://r.tiye.me/Quamolit/quilling-lines/ .
 caps --ci
 yarn install --immutable
 calcit calcit.cirru js
+cp assets/* js-out/
 yarn vite
 ```
 
