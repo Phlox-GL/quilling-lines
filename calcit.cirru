@@ -85,6 +85,9 @@
                   :on $ {} $ :pointertap
                     fn (e d!) (js/document.body.requestFullscreen)
           :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'phlox.schema/PhloxElement)
+            :args $ [] $ :: 'Map 'Tag 'Dynamic
+            :features $ #{} :js-ffi
         'comp-flower $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-flower (states)
             let
@@ -181,6 +184,10 @@
                 :on $ {} $ :pointertap
                   fn (e d!) (on-change :stone d!)
           :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'phlox.schema/PhloxElement)
+            :args $ [] 'Tag $ :: 'Fn
+              {} (:return 'Unit)
+                :args $ [] 'Tag 'Dynamic
         'gen-trail $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn gen-trail (point)
             let
@@ -294,42 +301,68 @@
         '*store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defatom *store schema/store
           :examples $ []
+          :schema $ :: 'Ref $ :: 'Map 'Tag 'Dynamic
         'dispatch! $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn dispatch! (op op-data)
+          :code $ quote $ defn dispatch! (op)
             when
-              and dev? $ not= op :states
-              println |dispatch! op op-data
-            let
-                op-id $ shortid/generate
-                op-time $ js/Date.now
-              reset! *store $ updater @*store op op-data op-id op-time
+              and dev? $ match op (:states _ _) false _ true
+              println |dispatch! op
+            reset! *store $ updater @*store op (make-id!)
+              :timestamp $ shared/date-now-snapshot
           :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'Unit)
+            :args $ [] 'Enum
+        'load-font! $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn load-font! (on-ready) (onFontReady on-ready) &unit
+          :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'Unit)
+            :args $ [] $ :: 'Fn
+              {} (:return 'Unit)
+                :args $ []
+            :features $ #{} :js-ffi
         'main! $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn main! () (; js/console.log PIXI) (load-console-formatter!)
-            -> (new FontFaceObserver/default "|Josefin Sans") (.load)
-              .then $ fn (event) (render-app!)
+          :code $ quote $ defn main! () (; js/console.log PIXI) (load-console-formatter!) (load-font! render-app!)
             add-watch *store :change $ fn (store prev) (render-app!)
             println "|App Started"
           :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'Unit)
+            :args $ []
+            :features $ #{} :js-ffi
+        'make-id! $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn make-id! ()
+            let
+                value $ shortid/generate
+              if (string? value) (assert-type value 'String) (raise "|shortid returned a non-string")
+          :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'String)
+            :args $ []
+            :features $ #{} :js-ffi
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! () (println "|Code updated.") (clear-phlox-caches!) (remove-watch *store :change)
             add-watch *store :change $ fn (store prev) (render-app!)
-            render-app! true
+            render-app!
           :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'Unit)
+            :args $ []
+            :features $ #{} :js-ffi
         'render-app! $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn render-app! (? arg)
-            render! (comp-container @*store) dispatch! $ either arg $ {}
+          :code $ quote $ defn render-app! ()
+            render! (comp-container @*store) dispatch! $ {}
           :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'Unit)
+            :args $ []
+            :features $ #{} :js-ffi
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
-          :require ([] |pixi.js :as PIXI)
-            [] phlox.core :refer $ [] render! clear-phlox-caches!
-            [] app.container :refer $ [] comp-container
-            [] app.schema :as schema
-            [] app.config :refer $ [] dev?
-            [] |shortid :as shortid
-            [] app.updater :refer $ [] updater
-            [] |fontfaceobserver-es :as FontFaceObserver
+          :require (|pixi.js :as PIXI)
+            phlox.core :refer $ [] render! clear-phlox-caches!
+            app.container :refer $ [] comp-container
+            app.schema :as schema
+            app.config :refer $ [] dev?
+            |shortid :as shortid
+            app.updater :refer $ [] updater
+            |./font-ready.mjs :refer $ [] onFontReady
+            js-ffi.shared :as shared
     'app.schema $ %{} 'FileEntry
       :defs $ {} $ 'store
         %{} 'CodeEntry (:doc |)
@@ -338,22 +371,49 @@
               :states $ {}
               :cursor $ []
           :examples $ []
+          :schema $ :: 'Map 'Tag 'Dynamic
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.schema
     'app.updater $ %{} 'FileEntry
       :defs $ {} $ 'updater
         %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn updater (store op op-data op-id op-time)
-            case op
-              :add-x $ update store :x $ fn (x)
-                if (> x 10) 0 $ + x 1
-              :tab $ assoc store :tab op-data
-              :toggle-keyboard $ update store :keyboard-on? not
-              :counted $ update store :counted inc
-              :states $ update-states store op-data
-              :hydrate-storage op-data
-              op $ do (println "|unknown op" op op-data) store
+          :code $ quote $ defn updater (store op op-id op-time)
+            match op
+              (:add-x _)
+                update store :x $ fn (raw)
+                  let
+                      x $ assert-type raw 'Number
+                    if (> x 10) 0 $ + x 1
+              (:tab tab) (assoc store :tab tab)
+              (:toggle-keyboard _)
+                update store :keyboard-on? $ fn (raw)
+                  not $ assert-type raw 'Bool
+              (:counted _)
+                update store :counted $ fn (raw)
+                  inc $ assert-type raw 'Number
+              (:states cursor data)
+                update-states store
+                  assert-type cursor $ :: 'List 'Dynamic
+                  , data
+              (:hydrate-storage data)
+                if (map? data)
+                  assert-type data $ :: 'Map 'Tag 'Dynamic
+                  raise "|Stored application state must be a map"
+              _ $ do (println "|unknown op" op) store
           :examples $ []
+          :schema $ :: 'Fn $ {}
+            :args $ [] (:: 'Map 'Tag 'Dynamic) 'Enum 'String 'Number
+            :return $ :: 'Map 'Tag 'Dynamic
+          :tests $ [] $ %{} 'TestEntry (:name |routes-state-cursor)
+            :code $ quote $ assert=
+              {} $ :states $ {}
+                :flower $ {} $ :data
+                  {} $ :tab :flower
+              updater
+                {} $ :states $ {}
+                :: :states ([] :flower)
+                  {} $ :tab :flower
+                , |op-1 1
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.updater
           :require $ [] phlox.cursor :refer $ [] update-states
