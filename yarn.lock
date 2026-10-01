@@ -670,6 +670,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hsluv@npm:^1.0.1":
+  version: 1.0.2
+  resolution: "hsluv@npm:1.0.2"
+  checksum: 10c0/1baa35d582ba88d45c3b7d0442c14b716df25eccb99c5b1b44bbf3c08a278e53c3aa0abfedca19e695603bb6f0d1e1f438660f2aca1227461a2b9d9c361b8999
+  languageName: node
+  linkType: hard
+
 "isexe@npm:^4.0.0":
   version: 4.0.0
   resolution: "isexe@npm:4.0.0"
@@ -1016,6 +1023,7 @@ __metadata:
     "@calcit/procs": "npm:0.27.0"
     "@quamolit/phlox-utils": "npm:^0.0.2"
     fontfaceobserver-es: "npm:^3.3.3"
+    hsluv: "npm:^1.0.1"
     pixi.js: "npm:7.x"
     shortid: "npm:^2.2.16"
     vite: "npm:8.3.1"
