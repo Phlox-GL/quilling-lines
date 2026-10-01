@@ -10,14 +10,6 @@
   :files $ {}
     'app.config $ %{} 'FileEntry
       :defs $ {}
-        'cdn? $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ def cdn?
-            cond
-                exists? js/window
-                , false
-              (exists? js/process) (= |true js/process.env.cdn)
-              :else false
-          :examples $ []
         'dev? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def dev? true
           :examples $ []
@@ -65,16 +57,22 @@
               c-times ([] 1 2) ([] 3 4)
         'comp-container $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-container (store)
-            ; println |Store store $ :tab store
             let
                 cursor $ []
-                states $ :states store
-                state $ either (:data states)
-                  {} $ :tab :stone
+                states $ decode-map-as
+                    get store :states
+                    , .unwrap
+                  :: 'Map 'Tag 'Dynamic
+                state $ decode-map-as
+                  either
+                      get states :data
+                      , .unwrap-or nil
+                    {} $ :tab :stone
+                  , app.schema/TabState
               container ({})
                 comp-tabs (:tab state)
                   fn (tab d!)
-                    d! cursor $ assoc state :tab tab
+                    d! $ :: :states cursor $ assoc (&struct:to-map state) :tab tab
                 case-default (:tab state) nil
                   :flower $ comp-flower $ >> states :flower
                   :stone $ comp-stone $ >> states :stone
@@ -91,29 +89,36 @@
         'comp-flower $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-flower (states)
             let
-                state $ either (:data states)
-                  {}
-                    :origin $ ' 0 0
-                    :points $ [] (' 200 40) (' 160 100) (' -9 80) (' -180 -40) (' -40 -80)
-                    :show-control? true
-                cursor $ :cursor states
+                state $ decode-map-as
+                  either
+                      get states :data
+                      , .unwrap-or nil
+                    {}
+                      :origin $ [] 0 0
+                      :points $ [] ([] 200 40) ([] 160 100) ([] -9 80) ([] -180 -40) ([] -40 -80)
+                      :show-control? true
+                  , app.schema/FlowerState
+                cursor $ decode-map-as
+                    get states :cursor
+                    , .unwrap
+                  :: 'List 'Dynamic
               container
                 {} $ :position $ [] 40 40
                 container
                   {} $ :position $ :origin state
                   graphics $ {} $ :ops
-                    -> state (:points)
+                    -> (:points state)
                       mapcat $ fn (point) (gen-trail point)
-                  , & $ -> state (:points)
+                  , & $ -> (:points state)
                     map-indexed $ fn (idx point)
                       comp-drag-point
-                        >> states $ turn-keyword $ str |p idx
+                        >> states $ turn-tag $ str |p idx
                         {} (:position point) (:unit 1)
                           :color $ hslx 40 50 80
                           :fill $ hslx 0 0 70
                           :alpha 0.5
                           :on-change $ fn (pos d!)
-                            d! cursor $ assoc-in state ([] :points idx) pos
+                            d! $ :: :states cursor $ assoc-in (&struct:to-map state) ([] :points idx) pos
                 comp-drag-point (>> states :origin)
                   {}
                     :position $ :origin state
@@ -121,18 +126,28 @@
                     :color $ hslx 0 0 80
                     :fill $ hslx 300 80 30
                     :on-change $ fn (pos d!)
-                      d! cursor $ assoc state :origin pos
+                      d! $ :: :states cursor $ assoc (&struct:to-map state) :origin pos
                     :radius 10
                     :alpha 0.5
           :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'phlox.schema/PhloxElement)
+            :args $ [] $ :: 'Map 'Tag 'Dynamic
+            :features $ #{} :js-ffi
         'comp-stone $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-stone (states)
             let
-                cursor $ :cursor states
-                state $ either (:data states)
-                  merge
-                    {} $ :origin $ ' 0 0
-                    init-controls 60
+                cursor $ decode-map-as
+                    get states :cursor
+                    , .unwrap
+                  :: 'List 'Dynamic
+                state $ decode-map-as
+                  either
+                      get states :data
+                      , .unwrap-or nil
+                    merge
+                      {} $ :origin $ [] 0 0
+                      init-controls 60
+                  , app.schema/StoneState
                 angles $ :angles state
                 size $ :size state
                 fingers $ :fingers state
@@ -144,23 +159,23 @@
                     :color $ hslx 40 50 80
                     :fill $ hslx 0 0 70
                     :on-change $ fn (pos d!)
-                      d! cursor $ assoc state :origin pos
+                      d! $ :: :states cursor $ assoc (&struct:to-map state) :origin pos
                 comp-button $ {} (:text |Reset)
                   :position $ [] 80 -300
                   :on $ {} $ :pointertap
                     fn (e d!)
-                      d! cursor $ merge state $ init-controls 60
+                      d! $ :: :states cursor $ merge (&struct:to-map state) (init-controls 60)
                 let
                     points $ -> fingers $ map-indexed
                       fn (idx r)
                         let
-                            theta $ nth angles $ .rem idx size
+                            theta $
+                              nth angles $ .rem idx size
+                              , .unwrap
                             point $ c-times
-                              ' (cos theta) (sin theta)
-                              ' r 0
-                          ; println |angle theta
+                              [] (cos theta) (sin theta)
+                              [] r 0
                           , point
-                  ; js/console.log |points points
                   container
                     {} $ :position $ :origin state
                     graphics $ {} $ :ops
@@ -170,16 +185,19 @@
                             pow (&/ idx 30) 0.9
                             , points size
           :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'phlox.schema/PhloxElement)
+            :args $ [] $ :: 'Map 'Tag 'Dynamic
+            :features $ #{} :js-ffi
         'comp-tabs $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-tabs (tab on-change)
             container ({})
               comp-button $ {} (:text |Flower)
-                :position $ ' -40 -300
+                :position $ [] -40 -300
                 :align-right? false
                 :on $ {} $ :pointertap
                   fn (e d!) (on-change :flower d!)
               comp-button $ {} (:text |Stone)
-                :position $ ' -120 -300
+                :position $ [] -120 -300
                 :align-right? false
                 :on $ {} $ :pointertap
                   fn (e d!) (on-change :stone d!)
@@ -199,7 +217,7 @@
                     ratio $ &/ r0 30
                     concat
                       []
-                        g :move-to $ ' 0 0
+                        g :move-to $ [] 0 0
                         g :line-style $ {}
                           :color $ hslx
                             &+ hue $ rand 80
@@ -211,18 +229,22 @@
                         map $ fn (t0)
                           &let
                             theta $ &* &PI $ &- (&/ t0 60) 0.5
-                            ' :line-to $ c-times
+                            [] :line-to $ c-times
                               c-times
-                                c-times point $ ' (cos theta)
+                                c-times point $ [] (cos theta)
                                   &* 0.66 $ sin theta
                                 [] (sqrt ratio) 0
                               []
                                 pow (cos theta) 4
                                 , 0
           :examples $ []
+          :schema $ :: 'Fn $ {}
+            :args $ [] $ :: 'List 'Number
+            :return $ :: 'List $ :: 'List 'Dynamic
         'half-pi $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def half-pi (&/ &PI 2)
           :examples $ []
+          :schema $ :: 'Number
         'init-controls $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn init-controls (length)
             let
@@ -231,27 +253,53 @@
                 fingers $ make-finders ([]) size length
               {} (:angles angles) (:size size) (:fingers fingers)
           :examples $ []
+          :schema $ :: 'Fn $ {}
+            :args $ [] 'Number
+            :return $ :: 'Map 'Tag 'Dynamic
         'make-finders $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn make-finders (acc size depth)
             if (&<= depth 0) acc $ let
-                high $ if (empty? acc) 0 $ last acc
+                high $ if (empty? acc) 0 $
+                  last acc
+                  , .unwrap
                 idx $ count acc
                 v $ if (&>= idx size)
                   &+
-                    nth acc $ &- idx size
+                      nth acc $ &- idx size
+                      , .unwrap
                     &+ 30 $ rand 30
                   &+ high $ rand 16
               recur (conj acc v) size $ dec depth
           :examples $ []
+          :schema $ :: 'Fn $ {}
+            :args $ [] (:: 'List 'Number) 'Number 'Number
+            :return $ :: 'List 'Number
+        'rand $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn rand (bound)
+            * bound $ browser/random
+          :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'Number)
+            :args $ [] 'Number
         'rand-angles $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn rand-angles (acc)
             let
-                s $ if (empty? acc) 0 $ last acc
+                s $ if (empty? acc) 0 $
+                  last acc
+                  , .unwrap
                 x $ &+ 0.2 $ rand 0.9
               if
                 &>= (&+ s x) (&* 2 &PI)
                 , acc $ recur $ conj acc (&+ s x)
           :examples $ []
+          :schema $ :: 'Fn $ {}
+            :args $ [] $ :: 'List 'Number
+            :return $ :: 'List 'Number
+        'rand-int $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn rand-int (bound)
+            floor $ rand bound
+          :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'Number)
+            :args $ [] 'Number
         'ratio-between $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn ratio-between (ratio relative p)
             c-add
@@ -265,7 +313,7 @@
           :code $ quote $ defn stone-line (ratio points size)
             concat
               []
-                g :move-to $ ' 0 0
+                g :move-to $ [] 0 0
                 g :line-style $ {}
                   :color $ hslx
                     &+ 200 $ rand 60
@@ -278,24 +326,30 @@
               -> points $ map-indexed $ fn (idx p)
                 let
                     relative $ if (&>= idx size)
-                      nth points $ &- idx size
+                      (nth points (&- idx size))
+                        , .unwrap
                       [] 0 0
                   g :line-to $ ratio-between ratio relative p
           :examples $ []
+          :schema $ :: 'Fn $ {}
+            :args $ [] 'Number
+              :: 'List $ :: 'List 'Number
+              , 'Number
+            :return $ :: 'List $ :: 'List 'Dynamic
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.container
           :require
-            [] phlox.core :refer $ [] g hslx rect circle text container graphics create-list >>
-            [] phlox.comp.button :refer $ [] comp-button
-            [] phlox.comp.drag-point :refer $ [] comp-drag-point
-            [] phlox.comp.switch :refer $ [] comp-switch
-            [] phlox.input :refer $ [] request-text!
-            [] phlox.comp.messages :refer $ [] comp-messages
-            [] |shortid :as shortid
-            [] respo-ui.core :as ui
-            [] memof.alias :refer $ [] memof-call
-            [] phlox.complex :as complex
-            |@calcit/std :refer $ rand rand-int
+            phlox.core :refer $ [] g hslx rect circle text container graphics create-list >>
+            phlox.comp.button :refer $ [] comp-button
+            phlox.comp.drag-point :refer $ [] comp-drag-point
+            phlox.comp.switch :refer $ [] comp-switch
+            phlox.input :refer $ [] request-text!
+            phlox.comp.messages :refer $ [] comp-messages
+            |shortid :as shortid
+            respo-ui.core :as ui
+            memof.alias :refer $ [] memof-call
+            phlox.complex :as complex
+            js-ffi.browser :as browser
     'app.main $ %{} 'FileEntry
       :defs $ {}
         '*store $ %{} 'CodeEntry (:doc |)
@@ -305,7 +359,9 @@
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
             when
-              and dev? $ match op (:states _ _) false _ true
+              and dev? $ match op
+                (:states _ _) false
+                _ true
               println |dispatch! op
             reset! *store $ updater @*store op (make-id!)
               :timestamp $ shared/date-now-snapshot
@@ -364,8 +420,27 @@
             |./font-ready.mjs :refer $ [] onFontReady
             js-ffi.shared :as shared
     'app.schema $ %{} 'FileEntry
-      :defs $ {} $ 'store
-        %{} 'CodeEntry (:doc |)
+      :defs $ {}
+        'FlowerState $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defstruct FlowerState
+            :origin $ :: 'List 'Number
+            :points $ :: 'List $ :: 'List 'Number
+            :show-control? 'Bool
+          :examples $ []
+          :schema $ :: 'StructDef
+        'StoneState $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defstruct StoneState
+            :origin $ :: 'List 'Number
+            :angles $ :: 'List 'Number
+            :size 'Number
+            :fingers $ :: 'List 'Number
+          :examples $ []
+          :schema $ :: 'StructDef
+        'TabState $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defstruct TabState (:tab 'Tag)
+          :examples $ []
+          :schema $ :: 'StructDef
+        'store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def store
             {} (:tab :drafts) (:x 0) (:keyboard-on? false) (:counted 0)
               :states $ {}

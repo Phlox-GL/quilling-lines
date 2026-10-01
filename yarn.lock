@@ -16,13 +16,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@calcit/std@npm:^0.0.1":
-  version: 0.0.1
-  resolution: "@calcit/std@npm:0.0.1"
-  checksum: 10c0/7a42e23eeb37eeea23fdccd18064e57faed98167423259169e6d16186bd09e64896aa9df57095221a52f4fd5c1cb5840260ba236e268c88643622370634efb4d
-  languageName: node
-  linkType: hard
-
 "@calcit/ternary-tree@npm:0.0.26":
   version: 0.0.26
   resolution: "@calcit/ternary-tree@npm:0.0.26"
@@ -1021,7 +1014,6 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@calcit/procs": "npm:0.27.0"
-    "@calcit/std": "npm:^0.0.1"
     "@quamolit/phlox-utils": "npm:^0.0.2"
     fontfaceobserver-es: "npm:^3.3.3"
     pixi.js: "npm:7.x"

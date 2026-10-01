@@ -28,11 +28,19 @@ cursors with an additional definition-attached check. Font readiness stays in
 one small host adapter; initial drawing still waits for the font, while state
 watch registration remains synchronous. No unchecked conversion was added.
 
-The browser migration is not yet accepted: drawing-component contracts, Phlox
-component interfaces and Option lookups still need migration.
-Dependency installation and pure arithmetic tests do not prove the drawing
-application builds or runs. No successful COS upload or production deployment
-is claimed. Vite accepts the selected CDN base URL without a separate checker.
+Flower, Stone and tab state are decoded into named typed models at the component
+boundary. State updates remain maps in the existing cursor store and dispatch a
+single Enum. Numeric-list helpers preserve the drawing formulas and random
+distribution. Retired list syntax and Option indices have been migrated; the
+unused legacy CDN flag and old std package are removed.
+
+The workflow uses strict entry/public checks, the three existing attached tests,
+and a Vite build. PR CDN paths are isolated by PR number and run ID. COS action
+v1.1.1 handles upload and public verification itself, with no separate checker.
+Original server paths are unchanged. Local full checking still reports four
+upstream Phlox bounds warnings; remote Linux acceptance is pending. No real
+WebGL browser acceptance, successful COS upload or production deployment is
+claimed before that evidence exists.
 
 ### License
 
