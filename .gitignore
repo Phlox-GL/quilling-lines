@@ -7,3 +7,6 @@ node_modules/
 .yarn/
 dist/
 .DS_Store
+.calcit/
+compact.cirru
+package.cirru
