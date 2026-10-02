@@ -10,8 +10,9 @@ permissions:
   contents: read
 
 concurrency:
-  group: cos-${{ github.repository }}-${{ github.event_name == 'pull_request' && github.run_id || 'production' }}
+  group: cos-${{ github.repository }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'production' }}
   cancel-in-progress: false
+  queue: max
 
 jobs:
   test:
@@ -42,7 +43,6 @@ jobs:
         caps --ci
         yarn install --immutable
         caps verify --toolchain
-        test "$(calcit --version)" = "0.27.0"
         test -f calcit.cirru
         test -f deps.cirru
         test ! -e compact.cirru
@@ -63,7 +63,7 @@ jobs:
         set -euo pipefail
         asset_prefix="${GITHUB_REPOSITORY}/"
         if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
-          asset_prefix="${GITHUB_REPOSITORY}/pr/${PR_NUMBER}/${GITHUB_RUN_ID}/"
+          asset_prefix="${GITHUB_REPOSITORY}/pr/${PR_NUMBER}/${GITHUB_RUN_ID}/${GITHUB_RUN_ATTEMPT}/"
         fi
         base_url="https://cos-sh.tiye.me/${asset_prefix}"
         echo "VITE_BASE_URL=${base_url}" >> "$GITHUB_ENV"
@@ -72,9 +72,8 @@ jobs:
 
     - name: Compile frontend
       run: |
-        calcit calcit.cirru js
-        cp assets/* js-out/
-        yarn vite build
+        set -euo pipefail
+        yarn build
 
     - name: Check COS credentials
       id: cos-credentials
@@ -98,7 +97,7 @@ jobs:
 
     - name: Upload and verify frontend assets
       if: steps.cos-credentials.outputs.available == 'true'
-      uses: worktools/cos-upload-action@17e6d213fe9f6772a6090a13c8ba044cd6cbcb09 # v1.1.1
+      uses: worktools/cos-upload-action@06d6027dcca6413c5936e04a9b6e9f0d5ef71ba0 # v1.2.0
       with:
         source-dir: dist
         bucket: ${{ secrets.COS_BUCKET }}

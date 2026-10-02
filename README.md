@@ -9,10 +9,12 @@ Previews http://r.tiye.me/Quamolit/quilling-lines/ .
 ```bash
 caps --ci
 yarn install --immutable
-calcit calcit.cirru js
-cp assets/* js-out/
-yarn vite
+yarn dev
 ```
+
+`yarn build` compiles the default browser entry, copies the existing host assets
+and builds once. `yarn dev` compiles initially and starts Vite; for live Calcit
+edits, run `calcit calcit.cirru -w` in another terminal.
 
 ### Workflow
 
@@ -20,7 +22,7 @@ Workflow https://github.com/Quamolit/phlox.calcit
 
 ### Migration status
 
-This branch stages Calcit/procs 0.27.0 with canonical `calcit.cirru` and
+The project uses released Calcit/procs 0.27.0 with canonical `calcit.cirru` and
 `deps.cirru`. The retired compact snapshot has been recovered and backed up
 locally before removal. Complex addition/multiplication retain their formulas,
 with numeric-list contracts and two definition-attached arithmetic checks.
@@ -36,12 +38,11 @@ distribution. Retired list syntax and Option indices have been migrated; the
 unused legacy CDN flag and old std package are removed.
 
 The workflow uses strict entry/public checks, the three existing attached tests,
-and a Vite build. PR CDN paths are isolated by PR number and run ID. COS action
-v1.1.1 handles upload and public verification itself, with no separate checker.
-Original server paths are unchanged. Local full checking still reports four
-upstream Phlox bounds warnings; remote Linux acceptance is pending. No real
-WebGL browser acceptance, successful COS upload or production deployment is
-claimed before that evidence exists.
+and a Vite build. PR CDN paths are isolated by PR number, run ID and attempt.
+Released COS action v1.2.0 handles HTML reference and public upload verification
+itself, with no separate checker. Original production and server paths are
+unchanged. Compilation and upload verification do not prove real WebGL browser
+interaction.
 
 ### License
 
