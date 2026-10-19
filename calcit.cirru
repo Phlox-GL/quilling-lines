@@ -5,7 +5,7 @@
   :entries $ {} $ :default
     {} (:description |) (:init-fn 'app.main/main!) (:mode :js) (:reload-fn 'app.main/reload!) (:target :browser)
       :feature-policy $ {}
-      :modules $ [] |memof/ |lilac/ |respo.calcit/ |respo-ui.calcit/ |phlox/
+      :modules $ [] |phlox/
       :type-slots $ {}
   :files $ {}
     'app.config $ %{} 'FileEntry
@@ -73,9 +73,10 @@
                 comp-tabs (:tab state)
                   fn (tab d!)
                     d! $ :: :states cursor $ assoc (&struct:to-map state) :tab tab
+                    , &unit
                 case-default (:tab state) nil
-                  :flower $ comp-flower $ >> states :flower
-                  :stone $ comp-stone $ >> states :stone
+                  :flower $ comp-flower $ decode-map-as (>> states :flower) (:: 'Map 'Tag 'Dynamic)
+                  :stone $ comp-stone $ decode-map-as (>> states :stone) (:: 'Map 'Tag 'Dynamic)
                 circle $ {}
                   :fill $ hslx 200 80 30
                   :radius 10
@@ -339,15 +340,13 @@
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.container
           :require
-            phlox.core :refer $ [] g hslx rect circle text container graphics create-list >>
-            phlox.comp.button :refer $ [] comp-button
-            phlox.comp.drag-point :refer $ [] comp-drag-point
-            phlox.comp.switch :refer $ [] comp-switch
-            phlox.input :refer $ [] request-text!
-            phlox.comp.messages :refer $ [] comp-messages
+            phlox.core :refer $ g hslx rect circle text container graphics create-list >>
+            phlox.comp.button :refer $ comp-button
+            phlox.comp.drag-point :refer $ comp-drag-point
+            phlox.comp.switch :refer $ comp-switch
+            phlox.input :refer $ request-text!
+            phlox.comp.messages :refer $ comp-messages
             |shortid :as shortid
-            respo-ui.core :as ui
-            memof.alias :refer $ [] memof-call
             phlox.complex :as complex
             js-ffi.browser :as browser
     'app.main $ %{} 'FileEntry
@@ -365,6 +364,7 @@
               println |dispatch! op
             reset! *store $ updater @*store op (make-id!)
               :timestamp $ shared/date-now-snapshot
+            , &unit
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ [] 'Enum
@@ -378,7 +378,7 @@
             :features $ #{} :js-ffi
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! () (; js/console.log PIXI) (load-console-formatter!) (load-font! render-app!)
-            add-watch *store :change $ fn (store prev) (render-app!)
+            add-watch! *store :change $ fn (store prev) (render-app!)
             println "|App Started"
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
@@ -394,8 +394,8 @@
             :args $ []
             :features $ #{} :js-ffi
         'reload! $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn reload! () (println "|Code updated.") (clear-phlox-caches!) (remove-watch *store :change)
-            add-watch *store :change $ fn (store prev) (render-app!)
+          :code $ quote $ defn reload! () (println "|Code updated.") (clear-phlox-caches!) (remove-watch! *store :change)
+            add-watch! *store :change $ fn (store prev) (render-app!)
             render-app!
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
@@ -411,13 +411,13 @@
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
           :require (|pixi.js :as PIXI)
-            phlox.core :refer $ [] render! clear-phlox-caches!
-            app.container :refer $ [] comp-container
+            phlox.core :refer $ render! clear-phlox-caches!
+            app.container :refer $ comp-container
             app.schema :as schema
-            app.config :refer $ [] dev?
+            app.config :refer $ dev?
             |shortid :as shortid
-            app.updater :refer $ [] updater
-            |./font-ready.mjs :refer $ [] onFontReady
+            app.updater :refer $ updater
+            |./font-ready.mjs :refer $ onFontReady
             js-ffi.shared :as shared
     'app.schema $ %{} 'FileEntry
       :defs $ {}
@@ -457,22 +457,22 @@
               (:add-x _)
                 update store :x $ fn (raw)
                   let
-                      x $ assert-type raw 'Number
+                      x $ decode-map-as raw 'Number
                     if (> x 10) 0 $ + x 1
               (:tab tab) (assoc store :tab tab)
               (:toggle-keyboard _)
                 update store :keyboard-on? $ fn (raw)
-                  not $ assert-type raw 'Bool
+                  not $ decode-map-as raw 'Bool
               (:counted _)
                 update store :counted $ fn (raw)
-                  inc $ assert-type raw 'Number
+                  inc $ decode-map-as raw 'Number
               (:states cursor data)
                 update-states store
-                  assert-type cursor $ :: 'List 'Dynamic
+                  decode-map-as cursor $ :: 'List 'Dynamic
                   , data
               (:hydrate-storage data)
                 if (map? data)
-                  assert-type data $ :: 'Map 'Tag 'Dynamic
+                  decode-map-as data $ :: 'Map 'Tag 'Dynamic
                   raise "|Stored application state must be a map"
               _ $ do (println "|unknown op" op) store
           :examples $ []
@@ -491,4 +491,4 @@
                 , |op-1 1
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.updater
-          :require $ [] phlox.cursor :refer $ [] update-states
+          :require $ phlox.cursor :refer $ update-states
