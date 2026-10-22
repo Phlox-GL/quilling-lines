@@ -74,9 +74,10 @@
                   fn (tab d!)
                     d! $ :: :states cursor $ assoc (&struct:to-map state) :tab tab
                     , &unit
-                case-default (:tab state) nil
+                match (:tab state)
                   :flower $ comp-flower $ decode-map-as (>> states :flower) (:: 'Map 'Tag 'Dynamic)
                   :stone $ comp-stone $ decode-map-as (>> states :stone) (:: 'Map 'Tag 'Dynamic)
+                  _ nil
                 circle $ {}
                   :fill $ hslx 200 80 30
                   :radius 10
