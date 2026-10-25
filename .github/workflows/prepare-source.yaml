@@ -57,8 +57,10 @@ jobs:
           calcit --check-only --ns 'app.$meta' --ns app.config --ns app.container --ns app.main --ns app.schema --ns app.updater --format json > acceptance/public.json
           calcit fix --workflow strict --verify --format json | tee acceptance/strict.json | jq -e '.data.workflow.status == "passed" and .diagnostics == []'
           calcit test --require-match --format json | tee acceptance/tests.json
-          calcit analyze weak-types --only deprecated-call --summary-only --format json | jq -e '.data.summary.calls == 0'
-          calcit analyze weak-types --only dynamic-method --summary-only --format json | jq -e '.data.summary.findings == 0'
+          calcit analyze weak-types --only deprecated-call --format json > acceptance/deprecated.json
+          cat acceptance/deprecated.json
+          jq -e '.data.summary.calls == 0' acceptance/deprecated.json
+          calcit analyze weak-types --only dynamic-method --summary-only --format json | tee acceptance/dynamic-method.json | jq -e '.data.summary.findings == 0'
           yarn build
           yarn vite build --base=./
           git diff --quiet -- assets main.mjs package.json yarn.lock .yarnrc.yml
