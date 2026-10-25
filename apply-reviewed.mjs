@@ -12,10 +12,16 @@ const input=JSON.parse(readFileSync('reviewed.json','utf8'));
 const before={config:norm(input.config.data),namespaces:input.namespaces.map(v=>norm(v.data)),defs:input.definitions.map(v=>norm(v.data))};
 assert.equal(before.defs.length,31);assert.equal(before.namespaces.length,6);assert.equal(before.defs.reduce((n,d)=>n+d.tests.length,0),3);
 assert.deepEqual(q('config'),before.config);assert.deepEqual(q('ns').namespaces.map(n=>q('ns',n)),before.namespaces);for(const d of before.defs)assert.deepEqual(q('def',d.id),d);
-const expected=structuredClone(before),ops=[],sites=[],counts={merge:0,len:0};
+const expected=structuredClone(before),ops=[],sites=[],counts={merge:0,origin:0,len:0};
 const merges=new Set(['app.container/comp-stone']);const lengths=new Set(['app.container/init-controls','app.container/make-finders']);
 function walk(d,x,path){
   if(!Array.isArray(x)||['quote','quasiquote',';','comment','defmacro'].includes(x[0]))return;
+  if(d.id==='app.container/comp-stone'&&JSON.stringify(x)===JSON.stringify(['merge',['{}',[':origin',['[]','0','0']]],['init-controls','60']])){
+    const value=['.assoc',['init-controls','60'],':origin',['[]','0','0']];const p='@'+path.join('.');
+    assert.deepEqual(JSON.parse(run('tree','show',d.id,'--path',p,'--format','json')).tree,x);
+    sites.push({id:d.id,path,before:structuredClone(x),after:value});ops.push(['tree','replace',d.id,'--path',p,'--input-format','json-ast','--code',JSON.stringify(value)]);
+    x.splice(0,x.length,...value);counts.origin++;return;
+  }
   let value;
   if(merges.has(d.id)&&x[0]==='merge'){value='.merge';counts.merge++;}
   if(lengths.has(d.id)&&x[0]==='count'){assert.equal(x.length,2);assert.ok(['angles','acc'].includes(x[1]));value='.len';counts.len++;}
@@ -23,7 +29,7 @@ function walk(d,x,path){
   x.forEach((v,i)=>walk(d,v,[...path,i]));
 }
 for(const d of expected.defs)walk(d,d.code,[]);
-assert.deepEqual(counts,{merge:2,len:2});assert.equal(ops.length,4);
+assert.deepEqual(counts,{merge:1,origin:1,len:2});assert.equal(ops.length,4);
 for(const d of before.defs){const e=expected.defs.find(x=>x.id===d.id);for(const k of Object.keys(d).filter(k=>k!=='code'))assert.deepEqual(e[k],d[k]);if(!merges.has(d.id)&&!lengths.has(d.id))assert.deepEqual(e.code,d.code);}
 mkdirSync('acceptance',{recursive:true});for(const [name,value]of Object.entries({before,expected,sites,counts,operations:ops}))writeFileSync('acceptance/'+name+'.json',JSON.stringify(value,null,2));
 const txn=['edit','transaction','--code',JSON.stringify(ops),'--format','json'];const preview=JSON.parse(run(...txn,'--dry-run'));assert.ok(preview.scoped_revision);
