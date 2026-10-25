@@ -146,9 +146,7 @@
                   either
                       get states :data
                       , .unwrap-or nil
-                    merge
-                      {} $ :origin $ [] 0 0
-                      init-controls 60
+                    .assoc (init-controls 60) :origin $ [] 0 0
                   , app.schema/StoneState
                 angles $ :angles state
                 size $ :size state
@@ -166,7 +164,7 @@
                   :position $ [] 80 -300
                   :on $ {} $ :pointertap
                     fn (e d!)
-                      d! $ :: :states cursor $ merge (&struct:to-map state) (init-controls 60)
+                      d! $ :: :states cursor $ .merge (&struct:to-map state) (init-controls 60)
                 let
                     points $ -> fingers $ map-indexed
                       fn (idx r)
@@ -251,7 +249,7 @@
           :code $ quote $ defn init-controls (length)
             let
                 angles $ rand-angles $ []
-                size $ count angles
+                size $ .len angles
                 fingers $ make-finders ([]) size length
               {} (:angles angles) (:size size) (:fingers fingers)
           :examples $ []
@@ -264,7 +262,7 @@
                 high $ if (empty? acc) 0 $
                   last acc
                   , .unwrap
-                idx $ count acc
+                idx $ .len acc
                 v $ if (&>= idx size)
                   &+
                       nth acc $ &- idx size
@@ -353,7 +351,7 @@
     'app.main $ %{} 'FileEntry
       :defs $ {}
         '*store $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defatom *store schema/store
+          :code $ quote $ defref *store schema/store
           :examples $ []
           :schema $ :: 'Ref $ :: 'Map 'Tag 'Dynamic
         'dispatch! $ %{} 'CodeEntry (:doc |)

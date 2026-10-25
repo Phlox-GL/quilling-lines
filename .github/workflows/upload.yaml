@@ -45,12 +45,13 @@ jobs:
         caps --strict --ci
         yarn install --immutable
         caps verify --toolchain
+        git diff --quiet -- deps.cirru package.json yarn.lock .yarnrc.yml
         test -f calcit.cirru
         test -f deps.cirru
         test ! -e compact.cirru
         test ! -e package.cirru
         calcit calcit.cirru edit format
-        git diff --exit-code -- calcit.cirru
+        git diff --quiet -- calcit.cirru
         calcit calcit.cirru test --require-match
         calcit calcit.cirru --check-only --all-defs
         calcit calcit.cirru fix --workflow strict --verify --format json | jq -e 'select(.data.workflow.status == "passed" and .diagnostics == []) | {workflow:.data.workflow,diagnostics:.diagnostics}'
@@ -126,3 +127,11 @@ jobs:
     - name: Display status from deploy
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       run: echo "${{ steps.deploy.outputs.status }}"
+
+    - uses: actions/upload-artifact@v7.0.2
+      with:
+        name: runtime-${{ github.run_id }}-${{ github.run_attempt }}
+        path: |
+          dist
+          js-out
+        retention-days: 30
