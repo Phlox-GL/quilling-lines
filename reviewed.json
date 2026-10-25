@@ -1,0 +1,3720 @@
+{
+  "config": {
+    "schema_version": 1,
+    "command": "config.show",
+    "data": {
+      "package": "app",
+      "version": "0.4.7",
+      "selected_entry": null,
+      "entries": [
+        {
+          "name": "default",
+          "mode": "js",
+          "target": "browser",
+          "init_fn": "app.main/main!",
+          "reload_fn": "app.main/reload!",
+          "description": "",
+          "modules": [
+            "phlox/"
+          ],
+          "type_slots": {},
+          "feature_policy": {}
+        }
+      ],
+      "verification_schema_version": 1,
+      "verification_profiles": []
+    },
+    "diagnostics": [],
+    "revision": "md5:6dc586380bb162666cb64abc8584bbff"
+  },
+  "namespaces": [
+    {
+      "command": "query.ns",
+      "data": {
+        "definition_count": 2,
+        "doc": "",
+        "namespace": "app.$meta",
+        "ns_code": [
+          "ns",
+          "app.$meta"
+        ]
+      },
+      "schema_version": 1
+    },
+    {
+      "command": "query.ns",
+      "data": {
+        "definition_count": 2,
+        "doc": "",
+        "namespace": "app.config",
+        "ns_code": [
+          "ns",
+          "app.config"
+        ]
+      },
+      "schema_version": 1
+    },
+    {
+      "command": "query.ns",
+      "data": {
+        "definition_count": 15,
+        "doc": "",
+        "namespace": "app.container",
+        "ns_code": [
+          "ns",
+          "app.container",
+          [
+            ":require",
+            [
+              "phlox.core",
+              ":refer",
+              [
+                "g",
+                "hslx",
+                "rect",
+                "circle",
+                "text",
+                "container",
+                "graphics",
+                "create-list",
+                ">>"
+              ]
+            ],
+            [
+              "phlox.comp.button",
+              ":refer",
+              [
+                "comp-button"
+              ]
+            ],
+            [
+              "phlox.comp.drag-point",
+              ":refer",
+              [
+                "comp-drag-point"
+              ]
+            ],
+            [
+              "phlox.comp.switch",
+              ":refer",
+              [
+                "comp-switch"
+              ]
+            ],
+            [
+              "phlox.input",
+              ":refer",
+              [
+                "request-text!"
+              ]
+            ],
+            [
+              "phlox.comp.messages",
+              ":refer",
+              [
+                "comp-messages"
+              ]
+            ],
+            [
+              "|shortid",
+              ":as",
+              "shortid"
+            ],
+            [
+              "phlox.complex",
+              ":as",
+              "complex"
+            ],
+            [
+              "js-ffi.browser",
+              ":as",
+              "browser"
+            ]
+          ]
+        ]
+      },
+      "schema_version": 1
+    },
+    {
+      "command": "query.ns",
+      "data": {
+        "definition_count": 7,
+        "doc": "",
+        "namespace": "app.main",
+        "ns_code": [
+          "ns",
+          "app.main",
+          [
+            ":require",
+            [
+              "|pixi.js",
+              ":as",
+              "PIXI"
+            ],
+            [
+              "phlox.core",
+              ":refer",
+              [
+                "render!",
+                "clear-phlox-caches!"
+              ]
+            ],
+            [
+              "app.container",
+              ":refer",
+              [
+                "comp-container"
+              ]
+            ],
+            [
+              "app.schema",
+              ":as",
+              "schema"
+            ],
+            [
+              "app.config",
+              ":refer",
+              [
+                "dev?"
+              ]
+            ],
+            [
+              "|shortid",
+              ":as",
+              "shortid"
+            ],
+            [
+              "app.updater",
+              ":refer",
+              [
+                "updater"
+              ]
+            ],
+            [
+              "|./font-ready.mjs",
+              ":refer",
+              [
+                "onFontReady"
+              ]
+            ],
+            [
+              "js-ffi.shared",
+              ":as",
+              "shared"
+            ]
+          ]
+        ]
+      },
+      "schema_version": 1
+    },
+    {
+      "command": "query.ns",
+      "data": {
+        "definition_count": 4,
+        "doc": "",
+        "namespace": "app.schema",
+        "ns_code": [
+          "ns",
+          "app.schema"
+        ]
+      },
+      "schema_version": 1
+    },
+    {
+      "command": "query.ns",
+      "data": {
+        "definition_count": 1,
+        "doc": "",
+        "namespace": "app.updater",
+        "ns_code": [
+          "ns",
+          "app.updater",
+          [
+            ":require",
+            [
+              "phlox.cursor",
+              ":refer",
+              [
+                "update-states"
+              ]
+            ]
+          ]
+        ]
+      },
+      "schema_version": 1
+    }
+  ],
+  "definitions": [
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "def",
+          "calcit-dirname",
+          "|"
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.$meta/calcit-dirname",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:b9c073ddc99189680e33ec22dc7f5689",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "def",
+          "calcit-filename",
+          "|calcit.cirru"
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.$meta/calcit-filename",
+        "js_ffi": null,
+        "schema": null,
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:a2706c65c80308f07d99e2a9ab5bd02b",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "def",
+          "dev?",
+          "true"
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.config/dev?",
+        "js_ffi": null,
+        "schema": "'Bool",
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:e7cbb41098622ba96b40ce2858658eec",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "def",
+          "site",
+          [
+            "{}",
+            [
+              ":dev-ui",
+              "|http://localhost:8100/main.css"
+            ],
+            [
+              ":release-ui",
+              "|http://cdn.tiye.me/favored-fonts/main.css"
+            ],
+            [
+              ":cdn-url",
+              "|http://cdn.tiye.me/phlox/"
+            ],
+            [
+              ":title",
+              "|Phlox"
+            ],
+            [
+              ":icon",
+              "|http://cdn.tiye.me/logo/quamolit.png"
+            ],
+            [
+              ":storage-key",
+              "|phlox"
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.config/site",
+        "js_ffi": null,
+        "schema": [
+          "::",
+          "'Map",
+          "'Tag",
+          "'String"
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:60aba8f04914f578a0f0803c89d5c7ef",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "c-add",
+          [
+            "a",
+            "b"
+          ],
+          [
+            "let",
+            [
+              [
+                "x1",
+                [
+                  "&list:nth",
+                  "a",
+                  "0"
+                ]
+              ],
+              [
+                "y1",
+                [
+                  "&list:nth",
+                  "a",
+                  "1"
+                ]
+              ],
+              [
+                "x2",
+                [
+                  "&list:nth",
+                  "b",
+                  "0"
+                ]
+              ],
+              [
+                "y2",
+                [
+                  "&list:nth",
+                  "b",
+                  "1"
+                ]
+              ]
+            ],
+            [
+              "[]",
+              [
+                "&+",
+                "x1",
+                "x2"
+              ],
+              [
+                "&+",
+                "y1",
+                "y2"
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.container/c-add",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              [
+                "::",
+                "'List",
+                "'Number"
+              ],
+              [
+                "::",
+                "'List",
+                "'Number"
+              ]
+            ]
+          ],
+          [
+            ":return",
+            [
+              "::",
+              "'List",
+              "'Number"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": [
+          {
+            "code": [
+              "assert=",
+              [
+                "[]",
+                "4",
+                "6"
+              ],
+              [
+                "c-add",
+                [
+                  "[]",
+                  "1",
+                  "2"
+                ],
+                [
+                  "[]",
+                  "3",
+                  "4"
+                ]
+              ]
+            ],
+            "name": "sums-components",
+            "tags": []
+          }
+        ]
+      },
+      "diagnostics": [],
+      "revision": "md5:055e9f379d7abc6e5c7c4ba082913a1a",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "c-times",
+          [
+            "a",
+            "b"
+          ],
+          [
+            "let",
+            [
+              [
+                "x",
+                [
+                  "&list:nth",
+                  "a",
+                  "0"
+                ]
+              ],
+              [
+                "y",
+                [
+                  "&list:nth",
+                  "a",
+                  "1"
+                ]
+              ],
+              [
+                "x1",
+                [
+                  "&list:nth",
+                  "b",
+                  "0"
+                ]
+              ],
+              [
+                "y1",
+                [
+                  "&list:nth",
+                  "b",
+                  "1"
+                ]
+              ]
+            ],
+            [
+              "[]",
+              [
+                "&-",
+                [
+                  "&*",
+                  "x",
+                  "x1"
+                ],
+                [
+                  "&*",
+                  "y",
+                  "y1"
+                ]
+              ],
+              [
+                "&+",
+                [
+                  "&*",
+                  "x",
+                  "y1"
+                ],
+                [
+                  "&*",
+                  "x1",
+                  "y"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.container/c-times",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              [
+                "::",
+                "'List",
+                "'Number"
+              ],
+              [
+                "::",
+                "'List",
+                "'Number"
+              ]
+            ]
+          ],
+          [
+            ":return",
+            [
+              "::",
+              "'List",
+              "'Number"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": [
+          {
+            "code": [
+              "assert=",
+              [
+                "[]",
+                "-5",
+                "10"
+              ],
+              [
+                "c-times",
+                [
+                  "[]",
+                  "1",
+                  "2"
+                ],
+                [
+                  "[]",
+                  "3",
+                  "4"
+                ]
+              ]
+            ],
+            "name": "multiplies-complex-components",
+            "tags": []
+          }
+        ]
+      },
+      "diagnostics": [],
+      "revision": "md5:0044177485c3847a67d4b7aed0743e48",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "comp-container",
+          [
+            "store"
+          ],
+          [
+            "let",
+            [
+              [
+                "cursor",
+                [
+                  "[]"
+                ]
+              ],
+              [
+                "states",
+                [
+                  "decode-map-as",
+                  [
+                    [
+                      "get",
+                      "store",
+                      ":states"
+                    ],
+                    ".unwrap"
+                  ],
+                  [
+                    "::",
+                    "'Map",
+                    "'Tag",
+                    "'Dynamic"
+                  ]
+                ]
+              ],
+              [
+                "state",
+                [
+                  "decode-map-as",
+                  [
+                    "either",
+                    [
+                      [
+                        "get",
+                        "states",
+                        ":data"
+                      ],
+                      ".unwrap-or",
+                      "nil"
+                    ],
+                    [
+                      "{}",
+                      [
+                        ":tab",
+                        ":stone"
+                      ]
+                    ]
+                  ],
+                  "app.schema/TabState"
+                ]
+              ]
+            ],
+            [
+              "container",
+              [
+                "{}"
+              ],
+              [
+                "comp-tabs",
+                [
+                  ":tab",
+                  "state"
+                ],
+                [
+                  "fn",
+                  [
+                    "tab",
+                    "d!"
+                  ],
+                  [
+                    "d!",
+                    [
+                      "::",
+                      ":states",
+                      "cursor",
+                      [
+                        "assoc",
+                        [
+                          "&struct:to-map",
+                          "state"
+                        ],
+                        ":tab",
+                        "tab"
+                      ]
+                    ]
+                  ],
+                  "&unit"
+                ]
+              ],
+              [
+                "match",
+                [
+                  ":tab",
+                  "state"
+                ],
+                [
+                  ":flower",
+                  [
+                    "comp-flower",
+                    [
+                      "decode-map-as",
+                      [
+                        ">>",
+                        "states",
+                        ":flower"
+                      ],
+                      [
+                        "::",
+                        "'Map",
+                        "'Tag",
+                        "'Dynamic"
+                      ]
+                    ]
+                  ]
+                ],
+                [
+                  ":stone",
+                  [
+                    "comp-stone",
+                    [
+                      "decode-map-as",
+                      [
+                        ">>",
+                        "states",
+                        ":stone"
+                      ],
+                      [
+                        "::",
+                        "'Map",
+                        "'Tag",
+                        "'Dynamic"
+                      ]
+                    ]
+                  ]
+                ],
+                [
+                  "_",
+                  "nil"
+                ]
+              ],
+              [
+                "circle",
+                [
+                  "{}",
+                  [
+                    ":fill",
+                    [
+                      "hslx",
+                      "200",
+                      "80",
+                      "30"
+                    ]
+                  ],
+                  [
+                    ":radius",
+                    "10"
+                  ],
+                  [
+                    ":position",
+                    [
+                      "[]",
+                      "60",
+                      "-300"
+                    ]
+                  ],
+                  [
+                    ":on",
+                    [
+                      "{}",
+                      [
+                        ":pointertap",
+                        [
+                          "fn",
+                          [
+                            "e",
+                            "d!"
+                          ],
+                          [
+                            "js/document.body.requestFullscreen"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.container/comp-container",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'phlox.schema/PhloxElement"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              [
+                "::",
+                "'Map",
+                "'Tag",
+                "'Dynamic"
+              ]
+            ]
+          ],
+          [
+            ":features",
+            [
+              "#{}",
+              ":js-ffi"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:65fc59bc3fcd71a6a6db1fb37a8ce281",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "comp-flower",
+          [
+            "states"
+          ],
+          [
+            "let",
+            [
+              [
+                "state",
+                [
+                  "decode-map-as",
+                  [
+                    "either",
+                    [
+                      [
+                        "get",
+                        "states",
+                        ":data"
+                      ],
+                      ".unwrap-or",
+                      "nil"
+                    ],
+                    [
+                      "{}",
+                      [
+                        ":origin",
+                        [
+                          "[]",
+                          "0",
+                          "0"
+                        ]
+                      ],
+                      [
+                        ":points",
+                        [
+                          "[]",
+                          [
+                            "[]",
+                            "200",
+                            "40"
+                          ],
+                          [
+                            "[]",
+                            "160",
+                            "100"
+                          ],
+                          [
+                            "[]",
+                            "-9",
+                            "80"
+                          ],
+                          [
+                            "[]",
+                            "-180",
+                            "-40"
+                          ],
+                          [
+                            "[]",
+                            "-40",
+                            "-80"
+                          ]
+                        ]
+                      ],
+                      [
+                        ":show-control?",
+                        "true"
+                      ]
+                    ]
+                  ],
+                  "app.schema/FlowerState"
+                ]
+              ],
+              [
+                "cursor",
+                [
+                  "decode-map-as",
+                  [
+                    [
+                      "get",
+                      "states",
+                      ":cursor"
+                    ],
+                    ".unwrap"
+                  ],
+                  [
+                    "::",
+                    "'List",
+                    "'Dynamic"
+                  ]
+                ]
+              ]
+            ],
+            [
+              "container",
+              [
+                "{}",
+                [
+                  ":position",
+                  [
+                    "[]",
+                    "40",
+                    "40"
+                  ]
+                ]
+              ],
+              [
+                "container",
+                [
+                  "{}",
+                  [
+                    ":position",
+                    [
+                      ":origin",
+                      "state"
+                    ]
+                  ]
+                ],
+                [
+                  "graphics",
+                  [
+                    "{}",
+                    [
+                      ":ops",
+                      [
+                        "->",
+                        [
+                          ":points",
+                          "state"
+                        ],
+                        [
+                          "mapcat",
+                          [
+                            "fn",
+                            [
+                              "point"
+                            ],
+                            [
+                              "gen-trail",
+                              "point"
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ],
+                "&",
+                [
+                  "->",
+                  [
+                    ":points",
+                    "state"
+                  ],
+                  [
+                    "map-indexed",
+                    [
+                      "fn",
+                      [
+                        "idx",
+                        "point"
+                      ],
+                      [
+                        "comp-drag-point",
+                        [
+                          ">>",
+                          "states",
+                          [
+                            "turn-tag",
+                            [
+                              "str",
+                              "|p",
+                              "idx"
+                            ]
+                          ]
+                        ],
+                        [
+                          "{}",
+                          [
+                            ":position",
+                            "point"
+                          ],
+                          [
+                            ":unit",
+                            "1"
+                          ],
+                          [
+                            ":color",
+                            [
+                              "hslx",
+                              "40",
+                              "50",
+                              "80"
+                            ]
+                          ],
+                          [
+                            ":fill",
+                            [
+                              "hslx",
+                              "0",
+                              "0",
+                              "70"
+                            ]
+                          ],
+                          [
+                            ":alpha",
+                            "0.5"
+                          ],
+                          [
+                            ":on-change",
+                            [
+                              "fn",
+                              [
+                                "pos",
+                                "d!"
+                              ],
+                              [
+                                "d!",
+                                [
+                                  "::",
+                                  ":states",
+                                  "cursor",
+                                  [
+                                    "assoc-in",
+                                    [
+                                      "&struct:to-map",
+                                      "state"
+                                    ],
+                                    [
+                                      "[]",
+                                      ":points",
+                                      "idx"
+                                    ],
+                                    "pos"
+                                  ]
+                                ]
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "comp-drag-point",
+                [
+                  ">>",
+                  "states",
+                  ":origin"
+                ],
+                [
+                  "{}",
+                  [
+                    ":position",
+                    [
+                      ":origin",
+                      "state"
+                    ]
+                  ],
+                  [
+                    ":unit",
+                    "1"
+                  ],
+                  [
+                    ":color",
+                    [
+                      "hslx",
+                      "0",
+                      "0",
+                      "80"
+                    ]
+                  ],
+                  [
+                    ":fill",
+                    [
+                      "hslx",
+                      "300",
+                      "80",
+                      "30"
+                    ]
+                  ],
+                  [
+                    ":on-change",
+                    [
+                      "fn",
+                      [
+                        "pos",
+                        "d!"
+                      ],
+                      [
+                        "d!",
+                        [
+                          "::",
+                          ":states",
+                          "cursor",
+                          [
+                            "assoc",
+                            [
+                              "&struct:to-map",
+                              "state"
+                            ],
+                            ":origin",
+                            "pos"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ],
+                  [
+                    ":radius",
+                    "10"
+                  ],
+                  [
+                    ":alpha",
+                    "0.5"
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.container/comp-flower",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'phlox.schema/PhloxElement"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              [
+                "::",
+                "'Map",
+                "'Tag",
+                "'Dynamic"
+              ]
+            ]
+          ],
+          [
+            ":features",
+            [
+              "#{}",
+              ":js-ffi"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:77b4ed56e70ba457968d132f3025cba3",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "comp-stone",
+          [
+            "states"
+          ],
+          [
+            "let",
+            [
+              [
+                "cursor",
+                [
+                  "decode-map-as",
+                  [
+                    [
+                      "get",
+                      "states",
+                      ":cursor"
+                    ],
+                    ".unwrap"
+                  ],
+                  [
+                    "::",
+                    "'List",
+                    "'Dynamic"
+                  ]
+                ]
+              ],
+              [
+                "state",
+                [
+                  "decode-map-as",
+                  [
+                    "either",
+                    [
+                      [
+                        "get",
+                        "states",
+                        ":data"
+                      ],
+                      ".unwrap-or",
+                      "nil"
+                    ],
+                    [
+                      "merge",
+                      [
+                        "{}",
+                        [
+                          ":origin",
+                          [
+                            "[]",
+                            "0",
+                            "0"
+                          ]
+                        ]
+                      ],
+                      [
+                        "init-controls",
+                        "60"
+                      ]
+                    ]
+                  ],
+                  "app.schema/StoneState"
+                ]
+              ],
+              [
+                "angles",
+                [
+                  ":angles",
+                  "state"
+                ]
+              ],
+              [
+                "size",
+                [
+                  ":size",
+                  "state"
+                ]
+              ],
+              [
+                "fingers",
+                [
+                  ":fingers",
+                  "state"
+                ]
+              ]
+            ],
+            [
+              "container",
+              [
+                "{}"
+              ],
+              [
+                "comp-drag-point",
+                [
+                  ">>",
+                  "states",
+                  ":origin"
+                ],
+                [
+                  "{}",
+                  [
+                    ":position",
+                    [
+                      ":origin",
+                      "state"
+                    ]
+                  ],
+                  [
+                    ":unit",
+                    "1"
+                  ],
+                  [
+                    ":color",
+                    [
+                      "hslx",
+                      "40",
+                      "50",
+                      "80"
+                    ]
+                  ],
+                  [
+                    ":fill",
+                    [
+                      "hslx",
+                      "0",
+                      "0",
+                      "70"
+                    ]
+                  ],
+                  [
+                    ":on-change",
+                    [
+                      "fn",
+                      [
+                        "pos",
+                        "d!"
+                      ],
+                      [
+                        "d!",
+                        [
+                          "::",
+                          ":states",
+                          "cursor",
+                          [
+                            "assoc",
+                            [
+                              "&struct:to-map",
+                              "state"
+                            ],
+                            ":origin",
+                            "pos"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "comp-button",
+                [
+                  "{}",
+                  [
+                    ":text",
+                    "|Reset"
+                  ],
+                  [
+                    ":position",
+                    [
+                      "[]",
+                      "80",
+                      "-300"
+                    ]
+                  ],
+                  [
+                    ":on",
+                    [
+                      "{}",
+                      [
+                        ":pointertap",
+                        [
+                          "fn",
+                          [
+                            "e",
+                            "d!"
+                          ],
+                          [
+                            "d!",
+                            [
+                              "::",
+                              ":states",
+                              "cursor",
+                              [
+                                "merge",
+                                [
+                                  "&struct:to-map",
+                                  "state"
+                                ],
+                                [
+                                  "init-controls",
+                                  "60"
+                                ]
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "let",
+                [
+                  [
+                    "points",
+                    [
+                      "->",
+                      "fingers",
+                      [
+                        "map-indexed",
+                        [
+                          "fn",
+                          [
+                            "idx",
+                            "r"
+                          ],
+                          [
+                            "let",
+                            [
+                              [
+                                "theta",
+                                [
+                                  [
+                                    "nth",
+                                    "angles",
+                                    [
+                                      ".rem",
+                                      "idx",
+                                      "size"
+                                    ]
+                                  ],
+                                  ".unwrap"
+                                ]
+                              ],
+                              [
+                                "point",
+                                [
+                                  "c-times",
+                                  [
+                                    "[]",
+                                    [
+                                      "cos",
+                                      "theta"
+                                    ],
+                                    [
+                                      "sin",
+                                      "theta"
+                                    ]
+                                  ],
+                                  [
+                                    "[]",
+                                    "r",
+                                    "0"
+                                  ]
+                                ]
+                              ]
+                            ],
+                            "point"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ],
+                [
+                  "container",
+                  [
+                    "{}",
+                    [
+                      ":position",
+                      [
+                        ":origin",
+                        "state"
+                      ]
+                    ]
+                  ],
+                  [
+                    "graphics",
+                    [
+                      "{}",
+                      [
+                        ":ops",
+                        [
+                          "->",
+                          [
+                            "range",
+                            "30"
+                          ],
+                          [
+                            "mapcat",
+                            [
+                              "fn",
+                              [
+                                "idx"
+                              ],
+                              [
+                                "stone-line",
+                                [
+                                  "pow",
+                                  [
+                                    "&/",
+                                    "idx",
+                                    "30"
+                                  ],
+                                  "0.9"
+                                ],
+                                "points",
+                                "size"
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.container/comp-stone",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'phlox.schema/PhloxElement"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              [
+                "::",
+                "'Map",
+                "'Tag",
+                "'Dynamic"
+              ]
+            ]
+          ],
+          [
+            ":features",
+            [
+              "#{}",
+              ":js-ffi"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:22e1356ae859787670b81368408d5b6d",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "comp-tabs",
+          [
+            "tab",
+            "on-change"
+          ],
+          [
+            "container",
+            [
+              "{}"
+            ],
+            [
+              "comp-button",
+              [
+                "{}",
+                [
+                  ":text",
+                  "|Flower"
+                ],
+                [
+                  ":position",
+                  [
+                    "[]",
+                    "-40",
+                    "-300"
+                  ]
+                ],
+                [
+                  ":align-right?",
+                  "false"
+                ],
+                [
+                  ":on",
+                  [
+                    "{}",
+                    [
+                      ":pointertap",
+                      [
+                        "fn",
+                        [
+                          "e",
+                          "d!"
+                        ],
+                        [
+                          "on-change",
+                          ":flower",
+                          "d!"
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              "comp-button",
+              [
+                "{}",
+                [
+                  ":text",
+                  "|Stone"
+                ],
+                [
+                  ":position",
+                  [
+                    "[]",
+                    "-120",
+                    "-300"
+                  ]
+                ],
+                [
+                  ":align-right?",
+                  "false"
+                ],
+                [
+                  ":on",
+                  [
+                    "{}",
+                    [
+                      ":pointertap",
+                      [
+                        "fn",
+                        [
+                          "e",
+                          "d!"
+                        ],
+                        [
+                          "on-change",
+                          ":stone",
+                          "d!"
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.container/comp-tabs",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'phlox.schema/PhloxElement"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Tag",
+              [
+                "::",
+                "'Fn",
+                [
+                  "{}",
+                  [
+                    ":return",
+                    "'Unit"
+                  ],
+                  [
+                    ":args",
+                    [
+                      "[]",
+                      "'Tag",
+                      "'Dynamic"
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:fb08db560862460eb888c17130154de7",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "gen-trail",
+          [
+            "point"
+          ],
+          [
+            "let",
+            [
+              [
+                "hue",
+                [
+                  "rand",
+                  "360"
+                ]
+              ],
+              [
+                "light",
+                [
+                  "&+",
+                  "30",
+                  [
+                    "rand",
+                    "10"
+                  ]
+                ]
+              ]
+            ],
+            [
+              "->",
+              [
+                "range",
+                "30"
+              ],
+              [
+                "mapcat",
+                [
+                  "fn",
+                  [
+                    "r0"
+                  ],
+                  [
+                    "&let",
+                    [
+                      "ratio",
+                      [
+                        "&/",
+                        "r0",
+                        "30"
+                      ]
+                    ],
+                    [
+                      "concat",
+                      [
+                        "[]",
+                        [
+                          "g",
+                          ":move-to",
+                          [
+                            "[]",
+                            "0",
+                            "0"
+                          ]
+                        ],
+                        [
+                          "g",
+                          ":line-style",
+                          [
+                            "{}",
+                            [
+                              ":color",
+                              [
+                                "hslx",
+                                [
+                                  "&+",
+                                  "hue",
+                                  [
+                                    "rand",
+                                    "80"
+                                  ]
+                                ],
+                                [
+                                  "&+",
+                                  "50",
+                                  [
+                                    "rand",
+                                    "10"
+                                  ]
+                                ],
+                                [
+                                  "&+",
+                                  "light",
+                                  [
+                                    "rand",
+                                    "10"
+                                  ]
+                                ]
+                              ]
+                            ],
+                            [
+                              ":width",
+                              "1"
+                            ],
+                            [
+                              ":alpha",
+                              "1"
+                            ]
+                          ]
+                        ]
+                      ],
+                      [
+                        "->",
+                        [
+                          "range",
+                          "60"
+                        ],
+                        [
+                          "map",
+                          [
+                            "fn",
+                            [
+                              "t0"
+                            ],
+                            [
+                              "&let",
+                              [
+                                "theta",
+                                [
+                                  "&*",
+                                  "&PI",
+                                  [
+                                    "&-",
+                                    [
+                                      "&/",
+                                      "t0",
+                                      "60"
+                                    ],
+                                    "0.5"
+                                  ]
+                                ]
+                              ],
+                              [
+                                "[]",
+                                ":line-to",
+                                [
+                                  "c-times",
+                                  [
+                                    "c-times",
+                                    [
+                                      "c-times",
+                                      "point",
+                                      [
+                                        "[]",
+                                        [
+                                          "cos",
+                                          "theta"
+                                        ],
+                                        [
+                                          "&*",
+                                          "0.66",
+                                          [
+                                            "sin",
+                                            "theta"
+                                          ]
+                                        ]
+                                      ]
+                                    ],
+                                    [
+                                      "[]",
+                                      [
+                                        "sqrt",
+                                        "ratio"
+                                      ],
+                                      "0"
+                                    ]
+                                  ],
+                                  [
+                                    "[]",
+                                    [
+                                      "pow",
+                                      [
+                                        "cos",
+                                        "theta"
+                                      ],
+                                      "4"
+                                    ],
+                                    "0"
+                                  ]
+                                ]
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.container/gen-trail",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              [
+                "::",
+                "'List",
+                "'Number"
+              ]
+            ]
+          ],
+          [
+            ":return",
+            [
+              "::",
+              "'List",
+              [
+                "::",
+                "'List",
+                "'Dynamic"
+              ]
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:1ef88d5c3d99c1bea06339783cbfeb7c",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "def",
+          "half-pi",
+          [
+            "&/",
+            "&PI",
+            "2"
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.container/half-pi",
+        "js_ffi": null,
+        "schema": "'Number",
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:ddbe5b3168f1f996709c1c9c46bf9d32",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "init-controls",
+          [
+            "length"
+          ],
+          [
+            "let",
+            [
+              [
+                "angles",
+                [
+                  "rand-angles",
+                  [
+                    "[]"
+                  ]
+                ]
+              ],
+              [
+                "size",
+                [
+                  "count",
+                  "angles"
+                ]
+              ],
+              [
+                "fingers",
+                [
+                  "make-finders",
+                  [
+                    "[]"
+                  ],
+                  "size",
+                  "length"
+                ]
+              ]
+            ],
+            [
+              "{}",
+              [
+                ":angles",
+                "angles"
+              ],
+              [
+                ":size",
+                "size"
+              ],
+              [
+                ":fingers",
+                "fingers"
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.container/init-controls",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Number"
+            ]
+          ],
+          [
+            ":return",
+            [
+              "::",
+              "'Map",
+              "'Tag",
+              "'Dynamic"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:00e04b2516cbb357532374eb289f4b3a",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "make-finders",
+          [
+            "acc",
+            "size",
+            "depth"
+          ],
+          [
+            "if",
+            [
+              "&<=",
+              "depth",
+              "0"
+            ],
+            "acc",
+            [
+              "let",
+              [
+                [
+                  "high",
+                  [
+                    "if",
+                    [
+                      "empty?",
+                      "acc"
+                    ],
+                    "0",
+                    [
+                      [
+                        "last",
+                        "acc"
+                      ],
+                      ".unwrap"
+                    ]
+                  ]
+                ],
+                [
+                  "idx",
+                  [
+                    "count",
+                    "acc"
+                  ]
+                ],
+                [
+                  "v",
+                  [
+                    "if",
+                    [
+                      "&>=",
+                      "idx",
+                      "size"
+                    ],
+                    [
+                      "&+",
+                      [
+                        [
+                          "nth",
+                          "acc",
+                          [
+                            "&-",
+                            "idx",
+                            "size"
+                          ]
+                        ],
+                        ".unwrap"
+                      ],
+                      [
+                        "&+",
+                        "30",
+                        [
+                          "rand",
+                          "30"
+                        ]
+                      ]
+                    ],
+                    [
+                      "&+",
+                      "high",
+                      [
+                        "rand",
+                        "16"
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "recur",
+                [
+                  "conj",
+                  "acc",
+                  "v"
+                ],
+                "size",
+                [
+                  "dec",
+                  "depth"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.container/make-finders",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              [
+                "::",
+                "'List",
+                "'Number"
+              ],
+              "'Number",
+              "'Number"
+            ]
+          ],
+          [
+            ":return",
+            [
+              "::",
+              "'List",
+              "'Number"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:23d0bfff5c26e0ef7bb6dcb06789ebbb",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "rand",
+          [
+            "bound"
+          ],
+          [
+            "*",
+            "bound",
+            [
+              "browser/random"
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.container/rand",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'Number"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Number"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:e46fff8e93883d7034b57484d96681d9",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "rand-angles",
+          [
+            "acc"
+          ],
+          [
+            "let",
+            [
+              [
+                "s",
+                [
+                  "if",
+                  [
+                    "empty?",
+                    "acc"
+                  ],
+                  "0",
+                  [
+                    [
+                      "last",
+                      "acc"
+                    ],
+                    ".unwrap"
+                  ]
+                ]
+              ],
+              [
+                "x",
+                [
+                  "&+",
+                  "0.2",
+                  [
+                    "rand",
+                    "0.9"
+                  ]
+                ]
+              ]
+            ],
+            [
+              "if",
+              [
+                "&>=",
+                [
+                  "&+",
+                  "s",
+                  "x"
+                ],
+                [
+                  "&*",
+                  "2",
+                  "&PI"
+                ]
+              ],
+              "acc",
+              [
+                "recur",
+                [
+                  "conj",
+                  "acc",
+                  [
+                    "&+",
+                    "s",
+                    "x"
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.container/rand-angles",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              [
+                "::",
+                "'List",
+                "'Number"
+              ]
+            ]
+          ],
+          [
+            ":return",
+            [
+              "::",
+              "'List",
+              "'Number"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:537fd697d7a62ec2fc3e4b592ce6194b",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "rand-int",
+          [
+            "bound"
+          ],
+          [
+            "floor",
+            [
+              "rand",
+              "bound"
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.container/rand-int",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'Number"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Number"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:3c280690d977367ce12e0517aeee054a",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "ratio-between",
+          [
+            "ratio",
+            "relative",
+            "p"
+          ],
+          [
+            "c-add",
+            [
+              "c-times",
+              "relative",
+              [
+                "[]",
+                "ratio",
+                "0"
+              ]
+            ],
+            [
+              "c-times",
+              "p",
+              [
+                "[]",
+                [
+                  "&-",
+                  "1",
+                  "ratio"
+                ],
+                "0"
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.container/ratio-between",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Number",
+              [
+                "::",
+                "'List",
+                "'Number"
+              ],
+              [
+                "::",
+                "'List",
+                "'Number"
+              ]
+            ]
+          ],
+          [
+            ":return",
+            [
+              "::",
+              "'List",
+              "'Number"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:bf521892f25502bea60be89de391c045",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "stone-line",
+          [
+            "ratio",
+            "points",
+            "size"
+          ],
+          [
+            "concat",
+            [
+              "[]",
+              [
+                "g",
+                ":move-to",
+                [
+                  "[]",
+                  "0",
+                  "0"
+                ]
+              ],
+              [
+                "g",
+                ":line-style",
+                [
+                  "{}",
+                  [
+                    ":color",
+                    [
+                      "hslx",
+                      [
+                        "&+",
+                        "200",
+                        [
+                          "rand",
+                          "60"
+                        ]
+                      ],
+                      [
+                        "&+",
+                        "40",
+                        [
+                          "rand",
+                          "20"
+                        ]
+                      ],
+                      [
+                        "&+",
+                        "64",
+                        [
+                          "rand",
+                          "20"
+                        ]
+                      ]
+                    ]
+                  ],
+                  [
+                    ":width",
+                    [
+                      "&+",
+                      "1",
+                      [
+                        "rand-int",
+                        "6"
+                      ]
+                    ]
+                  ],
+                  [
+                    ":alpha",
+                    "0.8"
+                  ],
+                  [
+                    ":join",
+                    ":round"
+                  ],
+                  [
+                    ":cap",
+                    ":round"
+                  ]
+                ]
+              ]
+            ],
+            [
+              "->",
+              "points",
+              [
+                "map-indexed",
+                [
+                  "fn",
+                  [
+                    "idx",
+                    "p"
+                  ],
+                  [
+                    "let",
+                    [
+                      [
+                        "relative",
+                        [
+                          "if",
+                          [
+                            "&>=",
+                            "idx",
+                            "size"
+                          ],
+                          [
+                            [
+                              "nth",
+                              "points",
+                              [
+                                "&-",
+                                "idx",
+                                "size"
+                              ]
+                            ],
+                            ".unwrap"
+                          ],
+                          [
+                            "[]",
+                            "0",
+                            "0"
+                          ]
+                        ]
+                      ]
+                    ],
+                    [
+                      "g",
+                      ":line-to",
+                      [
+                        "ratio-between",
+                        "ratio",
+                        "relative",
+                        "p"
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.container/stone-line",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Number",
+              [
+                "::",
+                "'List",
+                [
+                  "::",
+                  "'List",
+                  "'Number"
+                ]
+              ],
+              "'Number"
+            ]
+          ],
+          [
+            ":return",
+            [
+              "::",
+              "'List",
+              [
+                "::",
+                "'List",
+                "'Dynamic"
+              ]
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:3a02fa272ad11ecce77d024a0fe8eca6",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defatom",
+          "*store",
+          "schema/store"
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.main/*store",
+        "js_ffi": null,
+        "schema": [
+          "::",
+          "'Ref",
+          [
+            "::",
+            "'Map",
+            "'Tag",
+            "'Dynamic"
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:f615c7a0d82f9d356182acfdbbafc70e",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "dispatch!",
+          [
+            "op"
+          ],
+          [
+            "when",
+            [
+              "and",
+              "dev?",
+              [
+                "match",
+                "op",
+                [
+                  [
+                    ":states",
+                    "_",
+                    "_"
+                  ],
+                  "false"
+                ],
+                [
+                  "_",
+                  "true"
+                ]
+              ]
+            ],
+            [
+              "println",
+              "|dispatch!",
+              "op"
+            ]
+          ],
+          [
+            "reset!",
+            "*store",
+            [
+              "updater",
+              "@*store",
+              "op",
+              [
+                "make-id!"
+              ],
+              [
+                ":timestamp",
+                [
+                  "shared/date-now-snapshot"
+                ]
+              ]
+            ]
+          ],
+          "&unit"
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.main/dispatch!",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'Unit"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              "'Enum"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:548881775c317ae68c37bc589ac297cd",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "load-font!",
+          [
+            "on-ready"
+          ],
+          [
+            "onFontReady",
+            "on-ready"
+          ],
+          "&unit"
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.main/load-font!",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'Unit"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              [
+                "::",
+                "'Fn",
+                [
+                  "{}",
+                  [
+                    ":return",
+                    "'Unit"
+                  ],
+                  [
+                    ":args",
+                    [
+                      "[]"
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ],
+          [
+            ":features",
+            [
+              "#{}",
+              ":js-ffi"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:bb1acad6b8aa1943ab2bd3747aff7150",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "main!",
+          [],
+          [
+            ";",
+            "js/console.log",
+            "PIXI"
+          ],
+          [
+            "load-console-formatter!"
+          ],
+          [
+            "load-font!",
+            "render-app!"
+          ],
+          [
+            "add-watch!",
+            "*store",
+            ":change",
+            [
+              "fn",
+              [
+                "store",
+                "prev"
+              ],
+              [
+                "render-app!"
+              ]
+            ]
+          ],
+          [
+            "println",
+            "|App Started"
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.main/main!",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'Unit"
+          ],
+          [
+            ":args",
+            [
+              "[]"
+            ]
+          ],
+          [
+            ":features",
+            [
+              "#{}",
+              ":js-ffi"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:0f9da068f553e117373766c292c02297",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "make-id!",
+          [],
+          [
+            "let",
+            [
+              [
+                "value",
+                [
+                  "shortid/generate"
+                ]
+              ]
+            ],
+            [
+              "if",
+              [
+                "string?",
+                "value"
+              ],
+              [
+                "assert-type",
+                "value",
+                "'String"
+              ],
+              [
+                "raise",
+                "|shortid returned a non-string"
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.main/make-id!",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'String"
+          ],
+          [
+            ":args",
+            [
+              "[]"
+            ]
+          ],
+          [
+            ":features",
+            [
+              "#{}",
+              ":js-ffi"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:63dc06775bb907e90f083a3941e32889",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "reload!",
+          [],
+          [
+            "println",
+            "|Code updated."
+          ],
+          [
+            "clear-phlox-caches!"
+          ],
+          [
+            "remove-watch!",
+            "*store",
+            ":change"
+          ],
+          [
+            "add-watch!",
+            "*store",
+            ":change",
+            [
+              "fn",
+              [
+                "store",
+                "prev"
+              ],
+              [
+                "render-app!"
+              ]
+            ]
+          ],
+          [
+            "render-app!"
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.main/reload!",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'Unit"
+          ],
+          [
+            ":args",
+            [
+              "[]"
+            ]
+          ],
+          [
+            ":features",
+            [
+              "#{}",
+              ":js-ffi"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:90bf8dad9a0f459beba1db24d75c1e5d",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "render-app!",
+          [],
+          [
+            "render!",
+            [
+              "comp-container",
+              "@*store"
+            ],
+            "dispatch!",
+            [
+              "{}"
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.main/render-app!",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":return",
+            "'Unit"
+          ],
+          [
+            ":args",
+            [
+              "[]"
+            ]
+          ],
+          [
+            ":features",
+            [
+              "#{}",
+              ":js-ffi"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:0462c4d45ff024f42b132b614f7a1094",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstruct",
+          "FlowerState",
+          [
+            ":origin",
+            [
+              "::",
+              "'List",
+              "'Number"
+            ]
+          ],
+          [
+            ":points",
+            [
+              "::",
+              "'List",
+              [
+                "::",
+                "'List",
+                "'Number"
+              ]
+            ]
+          ],
+          [
+            ":show-control?",
+            "'Bool"
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.schema/FlowerState",
+        "js_ffi": null,
+        "schema": "'StructDef",
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:58910e247361c93f841eba274b55e03a",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstruct",
+          "StoneState",
+          [
+            ":origin",
+            [
+              "::",
+              "'List",
+              "'Number"
+            ]
+          ],
+          [
+            ":angles",
+            [
+              "::",
+              "'List",
+              "'Number"
+            ]
+          ],
+          [
+            ":size",
+            "'Number"
+          ],
+          [
+            ":fingers",
+            [
+              "::",
+              "'List",
+              "'Number"
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.schema/StoneState",
+        "js_ffi": null,
+        "schema": "'StructDef",
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:445b5e3f9eb6fcd09250db33dc57260d",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defstruct",
+          "TabState",
+          [
+            ":tab",
+            "'Tag"
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.schema/TabState",
+        "js_ffi": null,
+        "schema": "'StructDef",
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:678900b78a05c0a9652e441bfb5f848a",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "def",
+          "store",
+          [
+            "{}",
+            [
+              ":tab",
+              ":drafts"
+            ],
+            [
+              ":x",
+              "0"
+            ],
+            [
+              ":keyboard-on?",
+              "false"
+            ],
+            [
+              ":counted",
+              "0"
+            ],
+            [
+              ":states",
+              [
+                "{}"
+              ]
+            ],
+            [
+              ":cursor",
+              [
+                "[]"
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.schema/store",
+        "js_ffi": null,
+        "schema": [
+          "::",
+          "'Map",
+          "'Tag",
+          "'Dynamic"
+        ],
+        "tags": [],
+        "tests": []
+      },
+      "diagnostics": [],
+      "revision": "md5:a752869786ce0d581546c6f1ebe5b4fd",
+      "schema_version": 1
+    },
+    {
+      "command": "query.def",
+      "data": {
+        "code": [
+          "defn",
+          "updater",
+          [
+            "store",
+            "op",
+            "op-id",
+            "op-time"
+          ],
+          [
+            "match",
+            "op",
+            [
+              [
+                ":add-x",
+                "_"
+              ],
+              [
+                "update",
+                "store",
+                ":x",
+                [
+                  "fn",
+                  [
+                    "raw"
+                  ],
+                  [
+                    "let",
+                    [
+                      [
+                        "x",
+                        [
+                          "decode-map-as",
+                          "raw",
+                          "'Number"
+                        ]
+                      ]
+                    ],
+                    [
+                      "if",
+                      [
+                        ">",
+                        "x",
+                        "10"
+                      ],
+                      "0",
+                      [
+                        "+",
+                        "x",
+                        "1"
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              [
+                ":tab",
+                "tab"
+              ],
+              [
+                "assoc",
+                "store",
+                ":tab",
+                "tab"
+              ]
+            ],
+            [
+              [
+                ":toggle-keyboard",
+                "_"
+              ],
+              [
+                "update",
+                "store",
+                ":keyboard-on?",
+                [
+                  "fn",
+                  [
+                    "raw"
+                  ],
+                  [
+                    "not",
+                    [
+                      "decode-map-as",
+                      "raw",
+                      "'Bool"
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              [
+                ":counted",
+                "_"
+              ],
+              [
+                "update",
+                "store",
+                ":counted",
+                [
+                  "fn",
+                  [
+                    "raw"
+                  ],
+                  [
+                    "inc",
+                    [
+                      "decode-map-as",
+                      "raw",
+                      "'Number"
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              [
+                ":states",
+                "cursor",
+                "data"
+              ],
+              [
+                "update-states",
+                "store",
+                [
+                  "decode-map-as",
+                  "cursor",
+                  [
+                    "::",
+                    "'List",
+                    "'Dynamic"
+                  ]
+                ],
+                "data"
+              ]
+            ],
+            [
+              [
+                ":hydrate-storage",
+                "data"
+              ],
+              [
+                "if",
+                [
+                  "map?",
+                  "data"
+                ],
+                [
+                  "decode-map-as",
+                  "data",
+                  [
+                    "::",
+                    "'Map",
+                    "'Tag",
+                    "'Dynamic"
+                  ]
+                ],
+                [
+                  "raise",
+                  "|Stored application state must be a map"
+                ]
+              ]
+            ],
+            [
+              "_",
+              [
+                "do",
+                [
+                  "println",
+                  "|unknown op",
+                  "op"
+                ],
+                "store"
+              ]
+            ]
+          ]
+        ],
+        "doc": "",
+        "examples": [],
+        "ffi": null,
+        "ffi_edn": null,
+        "id": "app.updater/updater",
+        "js_ffi": null,
+        "schema": [
+          "{}",
+          [
+            ":kind",
+            ":fn"
+          ],
+          [
+            ":args",
+            [
+              "[]",
+              [
+                "::",
+                "'Map",
+                "'Tag",
+                "'Dynamic"
+              ],
+              "'Enum",
+              "'String",
+              "'Number"
+            ]
+          ],
+          [
+            ":return",
+            [
+              "::",
+              "'Map",
+              "'Tag",
+              "'Dynamic"
+            ]
+          ]
+        ],
+        "tags": [],
+        "tests": [
+          {
+            "code": [
+              "assert=",
+              [
+                "{}",
+                [
+                  ":states",
+                  [
+                    "{}",
+                    [
+                      ":flower",
+                      [
+                        "{}",
+                        [
+                          ":data",
+                          [
+                            "{}",
+                            [
+                              ":tab",
+                              ":flower"
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "updater",
+                [
+                  "{}",
+                  [
+                    ":states",
+                    [
+                      "{}"
+                    ]
+                  ]
+                ],
+                [
+                  "::",
+                  ":states",
+                  [
+                    "[]",
+                    ":flower"
+                  ],
+                  [
+                    "{}",
+                    [
+                      ":tab",
+                      ":flower"
+                    ]
+                  ]
+                ],
+                "|op-1",
+                "1"
+              ]
+            ],
+            "name": "routes-state-cursor",
+            "tags": []
+          }
+        ]
+      },
+      "diagnostics": [],
+      "revision": "md5:bee1192add7d580831d62bf7087b9b46",
+      "schema_version": 1
+    }
+  ]
+}
