@@ -6,9 +6,15 @@ Previews http://r.tiye.me/Quamolit/quilling-lines/ .
 
 ### 使用者需要注意
 
-保持正式 Calcit/procs 0.30.1，Phlox 更新到已发布的 0.7.18，传递依赖为
-Touch Control 0.0.33 / JS FFI 0.2.6 / Pointed Prompt 0.0.21。重新安装依赖、
-重建并刷新，避免混用旧生成代码。应用版本和 npm 依赖不变。
+本次升级到精确配对的正式 Calcit/procs 0.31.0，Phlox 使用已发布的 0.8.0-alpha.3，
+传递依赖为 Touch Control 0.0.34 / JS FFI 0.2.7 / Pointed Prompt 0.0.23。
+重新安装依赖、重建并刷新，避免混用旧生成代码。应用版本、Snapshot 与原类型门禁不变。
+
+全部 190 个定义、29 个原公开定义、完整 strict（无 diagnostics）、原 3 项测试、
+canonical、immutable、4 模块工具链校验与构建通过。隔离 IAB 已观察 Flower 拖点重绘、
+Stone Reset 和刷新恢复，console 无 error/warn；切换后静态按钮文字仍偶发消失。
+保留 Phlox #71 的视觉限制，不宣称完整渲染验收通过；本轮未重做 HMR。
+以下 0.30.1 说明是之前源码迁移历史，本轮没有重复修改这些源码。
 
 Reset 的 Map 合并改为 `.merge`；默认状态先生成原控制参数，再用 `.assoc`
 补入原 origin（参数生成器不含 origin），避免把异构参数伪装成坐标列表 Map。
