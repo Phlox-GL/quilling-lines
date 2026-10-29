@@ -13,12 +13,12 @@
         'dev? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def dev? true
           :examples $ []
-          :schema $ :: 'Bool
+          :schema $ quote Bool
         'site $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def site
             {} (:dev-ui |http://localhost:8100/main.css) (:release-ui |http://cdn.tiye.me/favored-fonts/main.css) (:cdn-url |http://cdn.tiye.me/phlox/) (:title |Phlox) (:icon |http://cdn.tiye.me/logo/quamolit.png) (:storage-key |phlox)
           :examples $ []
-          :schema $ :: 'Map 'Tag 'String
+          :schema $ quote $ Map Tag String
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.config
     'app.container $ %{} 'FileEntry
@@ -32,9 +32,8 @@
                 y2 $ &list:nth b 1
               [] (&+ x1 x2) (&+ y1 y2)
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] (:: 'List 'Number) (:: 'List 'Number)
-            :return $ :: 'List 'Number
+          :schema $ quote $ Fn (List Number) (List Number)
+            -> $ List Number
           :tests $ [] $ %{} 'TestEntry (:name |sums-components)
             :code $ quote $ assert= ([] 4 6)
               c-add ([] 1 2) ([] 3 4)
@@ -49,9 +48,8 @@
                 &- (&* x x1) (&* y y1)
                 &+ (&* x y1) (&* x1 y)
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] (:: 'List 'Number) (:: 'List 'Number)
-            :return $ :: 'List 'Number
+          :schema $ quote $ Fn (List Number) (List Number)
+            -> $ List Number
           :tests $ [] $ %{} 'TestEntry (:name |multiplies-complex-components)
             :code $ quote $ assert= ([] -5 10)
               c-times ([] 1 2) ([] 3 4)
@@ -85,9 +83,7 @@
                   :on $ {} $ :pointertap
                     fn (e d!) (js/document.body.requestFullscreen)
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'phlox.schema/PhloxElement)
-            :args $ [] $ :: 'Map 'Tag 'Dynamic
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (Map Tag Dynamic) (-> phlox.schema/PhloxElement) (:features :js-ffi)
         'comp-flower $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-flower (states)
             let
@@ -132,9 +128,7 @@
                     :radius 10
                     :alpha 0.5
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'phlox.schema/PhloxElement)
-            :args $ [] $ :: 'Map 'Tag 'Dynamic
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (Map Tag Dynamic) (-> phlox.schema/PhloxElement) (:features :js-ffi)
         'comp-stone $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-stone (states)
             let
@@ -185,9 +179,7 @@
                             pow (&/ idx 30) 0.9
                             , points size
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'phlox.schema/PhloxElement)
-            :args $ [] $ :: 'Map 'Tag 'Dynamic
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (Map Tag Dynamic) (-> phlox.schema/PhloxElement) (:features :js-ffi)
         'comp-tabs $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-tabs (tab on-change)
             container ({})
@@ -202,10 +194,9 @@
                 :on $ {} $ :pointertap
                   fn (e d!) (on-change :stone d!)
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'phlox.schema/PhloxElement)
-            :args $ [] 'Tag $ :: 'Fn
-              {} (:return 'Unit)
-                :args $ [] 'Tag 'Dynamic
+          :schema $ quote $ Fn Tag
+            Fn Tag Dynamic $ -> Unit
+            -> phlox.schema/PhloxElement
         'gen-trail $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn gen-trail (point)
             let
@@ -238,13 +229,12 @@
                                 pow (cos theta) 4
                                 , 0
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] $ :: 'List 'Number
-            :return $ :: 'List $ :: 'List 'Dynamic
+          :schema $ quote $ Fn (List Number)
+            -> $ List $ List Dynamic
         'half-pi $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def half-pi (&/ &PI 2)
           :examples $ []
-          :schema $ :: 'Number
+          :schema $ quote Number
         'init-controls $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn init-controls (length)
             let
@@ -253,9 +243,8 @@
                 fingers $ make-finders ([]) size length
               {} (:angles angles) (:size size) (:fingers fingers)
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] 'Number
-            :return $ :: 'Map 'Tag 'Dynamic
+          :schema $ quote $ Fn Number
+            -> $ Map Tag Dynamic
         'make-finders $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn make-finders (acc size depth)
             if (&<= depth 0) acc $ let
@@ -271,15 +260,13 @@
                   &+ high $ rand 16
               recur (conj acc v) size $ dec depth
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] (:: 'List 'Number) 'Number 'Number
-            :return $ :: 'List 'Number
+          :schema $ quote $ Fn (List Number) Number Number
+            -> $ List Number
         'rand $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn rand (bound)
             * bound $ browser/random
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Number)
-            :args $ [] 'Number
+          :schema $ quote $ Fn Number (-> Number)
         'rand-angles $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn rand-angles (acc)
             let
@@ -291,24 +278,21 @@
                 &>= (&+ s x) (&* 2 &PI)
                 , acc $ recur $ conj acc (&+ s x)
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] $ :: 'List 'Number
-            :return $ :: 'List 'Number
+          :schema $ quote $ Fn (List Number)
+            -> $ List Number
         'rand-int $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn rand-int (bound)
             floor $ rand bound
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Number)
-            :args $ [] 'Number
+          :schema $ quote $ Fn Number (-> Number)
         'ratio-between $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn ratio-between (ratio relative p)
             c-add
               c-times relative $ [] ratio 0
               c-times p $ [] (&- 1 ratio) 0
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] 'Number (:: 'List 'Number) (:: 'List 'Number)
-            :return $ :: 'List 'Number
+          :schema $ quote $ Fn Number (List Number) (List Number)
+            -> $ List Number
         'stone-line $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn stone-line (ratio points size)
             concat
@@ -331,11 +315,10 @@
                       [] 0 0
                   g :line-to $ ratio-between ratio relative p
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] 'Number
-              :: 'List $ :: 'List 'Number
-              , 'Number
-            :return $ :: 'List $ :: 'List 'Dynamic
+          :schema $ quote $ Fn Number
+            List $ List Number
+            , Number
+              -> $ List $ List Dynamic
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.container
           :require
@@ -353,7 +336,7 @@
         '*store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *store schema/store
           :examples $ []
-          :schema $ :: 'Ref $ :: 'Map 'Tag 'Dynamic
+          :schema $ quote $ Ref (Map Tag Dynamic)
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
             when
@@ -365,48 +348,38 @@
               :timestamp $ shared/date-now-snapshot
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ [] 'Enum
+          :schema $ quote $ Fn Enum (-> Unit)
         'load-font! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn load-font! (on-ready) (onFontReady on-ready) &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ [] $ :: 'Fn
-              {} (:return 'Unit)
-                :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn
+            Fn $ -> Unit
+            -> Unit
+            :features :js-ffi
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! () (; js/console.log PIXI) (load-console-formatter!) (load-font! render-app!)
             add-watch! *store :change $ fn (store prev) (render-app!)
             println "|App Started"
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'make-id! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn make-id! ()
             let
                 value $ shortid/generate
               if (string? value) (assert-type value 'String) (raise "|shortid returned a non-string")
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'String)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> String) (:features :js-ffi)
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! () (println "|Code updated.") (clear-phlox-caches!) (remove-watch! *store :change)
             add-watch! *store :change $ fn (store prev) (render-app!)
             render-app!
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
             render! (comp-container @*store) dispatch! $ {}
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
           :require (|pixi.js :as PIXI)
@@ -422,30 +395,30 @@
       :defs $ {}
         'FlowerState $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct FlowerState
-            :origin $ :: 'List 'Number
-            :points $ :: 'List $ :: 'List 'Number
+            :origin $ quote $ List Number
+            :points $ quote $ List (List Number)
             :show-control? 'Bool
           :examples $ []
-          :schema $ :: 'StructDef
+          :schema $ quote StructDef
         'StoneState $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct StoneState
-            :origin $ :: 'List 'Number
-            :angles $ :: 'List 'Number
+            :origin $ quote $ List Number
+            :angles $ quote $ List Number
             :size 'Number
-            :fingers $ :: 'List 'Number
+            :fingers $ quote $ List Number
           :examples $ []
-          :schema $ :: 'StructDef
+          :schema $ quote StructDef
         'TabState $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct TabState (:tab 'Tag)
           :examples $ []
-          :schema $ :: 'StructDef
+          :schema $ quote StructDef
         'store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def store
             {} (:tab :drafts) (:x 0) (:keyboard-on? false) (:counted 0)
               :states $ {}
               :cursor $ []
           :examples $ []
-          :schema $ :: 'Map 'Tag 'Dynamic
+          :schema $ quote $ Map Tag Dynamic
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.schema
     'app.updater $ %{} 'FileEntry
@@ -475,9 +448,8 @@
                   raise "|Stored application state must be a map"
               _ $ do (println "|unknown op" op) store
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] (:: 'Map 'Tag 'Dynamic) 'Enum 'String 'Number
-            :return $ :: 'Map 'Tag 'Dynamic
+          :schema $ quote $ Fn (Map Tag Dynamic) Enum String Number
+            -> $ Map Tag Dynamic
           :tests $ [] $ %{} 'TestEntry (:name |routes-state-cursor)
             :code $ quote $ assert=
               {} $ :states $ {}
