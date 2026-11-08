@@ -56,26 +56,19 @@
         'comp-container $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-container (store)
             let
-                cursor $ []
                 states $ decode-map-as
                     get store :states
                     , .unwrap
-                  :: 'Map 'Tag 'Dynamic
-                state $ decode-map-as
-                  either
-                      get states :data
-                      , .unwrap-or nil
-                    {} $ :tab :stone
-                  , app.schema/TabState
-              container ({})
-                comp-tabs (:tab state)
-                  fn (tab d!)
-                    d! $ :: :states cursor $ assoc (&struct:to-map state) :tab tab
-                    , &unit
+                  Map Tag Dynamic
+                state $ if-let
+                  data $ .and-then (get states :data) nil->option
+                  decode-map-as data app.schema/TabState
+                  app.schema/TabState :tab :stone
+              container ({}) (comp-tabs)
                 match (:tab state)
-                  :flower $ comp-flower $ decode-map-as (>> states :flower) (:: 'Map 'Tag 'Dynamic)
-                  :stone $ comp-stone $ decode-map-as (>> states :stone) (:: 'Map 'Tag 'Dynamic)
-                  _ nil
+                  :flower $ comp-flower $ decode-map-as (>> states :flower) (Map Tag Dynamic)
+                  :stone $ comp-stone $ decode-map-as (>> states :stone) (Map Tag Dynamic)
+                  _ $ container $ {}
                 circle $ {}
                   :fill $ hslx 200 80 30
                   :radius 10
@@ -87,19 +80,12 @@
         'comp-flower $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-flower (states)
             let
-                state $ decode-map-as
-                  either
-                      get states :data
-                      , .unwrap-or nil
-                    {}
-                      :origin $ [] 0 0
-                      :points $ [] ([] 200 40) ([] 160 100) ([] -9 80) ([] -180 -40) ([] -40 -80)
-                      :show-control? true
-                  , app.schema/FlowerState
-                cursor $ decode-map-as
-                    get states :cursor
-                    , .unwrap
-                  :: 'List 'Dynamic
+                state $ if-let
+                  data $ .and-then (get states :data) nil->option
+                  decode-map-as data app.schema/FlowerState
+                  let
+                      points $ [] ([] 200 40) ([] 160 100) ([] -9 80) ([] -180 -40) ([] -40 -80)
+                    app.schema/FlowerState :origin ([] 0 0) :points points :show-control? true
               container
                 {} $ :position $ [] 40 40
                 container
@@ -116,7 +102,8 @@
                           :fill $ hslx 0 0 70
                           :alpha 0.5
                           :on-change $ fn (pos d!)
-                            d! $ :: :states cursor $ assoc-in (&struct:to-map state) ([] :points idx) pos
+                            d! $ app.schema/Op :scene $ assoc state :points
+                              .assoc (:points state) idx $ decode-map-as pos $ List Number
                 comp-drag-point (>> states :origin)
                   {}
                     :position $ :origin state
@@ -124,7 +111,8 @@
                     :color $ hslx 0 0 80
                     :fill $ hslx 300 80 30
                     :on-change $ fn (pos d!)
-                      d! $ :: :states cursor $ assoc (&struct:to-map state) :origin pos
+                      d! $ app.schema/Op :scene $ assoc state :origin
+                        decode-map-as pos $ List Number
                     :radius 10
                     :alpha 0.5
           :examples $ []
@@ -132,16 +120,10 @@
         'comp-stone $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-stone (states)
             let
-                cursor $ decode-map-as
-                    get states :cursor
-                    , .unwrap
-                  :: 'List 'Dynamic
-                state $ decode-map-as
-                  either
-                      get states :data
-                      , .unwrap-or nil
-                    .assoc (init-controls 60) :origin $ [] 0 0
-                  , app.schema/StoneState
+                state $ if-let
+                  data $ .and-then (get states :data) nil->option
+                  decode-map-as data app.schema/StoneState
+                  init-controls 60 $ [] 0 0
                 angles $ :angles state
                 size $ :size state
                 fingers $ :fingers state
@@ -153,12 +135,13 @@
                     :color $ hslx 40 50 80
                     :fill $ hslx 0 0 70
                     :on-change $ fn (pos d!)
-                      d! $ :: :states cursor $ assoc (&struct:to-map state) :origin pos
+                      d! $ app.schema/Op :scene $ assoc state :origin
+                        decode-map-as pos $ List Number
                 comp-button $ {} (:text |Reset)
                   :position $ [] 80 -300
                   :on $ {} $ :pointertap
                     fn (e d!)
-                      d! $ :: :states cursor $ .merge (&struct:to-map state) (init-controls 60)
+                      d! $ app.schema/Op :scene $ init-controls 60 (:origin state)
                 let
                     points $ -> fingers $ map-indexed
                       fn (idx r)
@@ -181,22 +164,22 @@
           :examples $ []
           :schema $ quote $ Fn (Map Tag Dynamic) (-> phlox.schema/PhloxElement) (:features :js-ffi)
         'comp-tabs $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn comp-tabs (tab on-change)
+          :code $ quote $ defn comp-tabs ()
             container ({})
               comp-button $ {} (:text |Flower)
                 :position $ [] -40 -300
                 :align-right? false
                 :on $ {} $ :pointertap
-                  fn (e d!) (on-change :flower d!)
+                  fn (e d!)
+                    d! $ app.schema/Op :scene $ app.schema/TabState :tab :flower
               comp-button $ {} (:text |Stone)
                 :position $ [] -120 -300
                 :align-right? false
                 :on $ {} $ :pointertap
-                  fn (e d!) (on-change :stone d!)
+                  fn (e d!)
+                    d! $ app.schema/Op :scene $ app.schema/TabState :tab :stone
           :examples $ []
-          :schema $ quote $ Fn Tag
-            Fn Tag Dynamic $ -> Unit
-            -> phlox.schema/PhloxElement
+          :schema $ quote $ Fn (-> phlox.schema/PhloxElement)
         'gen-trail $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn gen-trail (point)
             let
@@ -236,15 +219,14 @@
           :examples $ []
           :schema $ quote Number
         'init-controls $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn init-controls (length)
+          :code $ quote $ defn init-controls (length origin)
             let
                 angles $ rand-angles $ []
                 size $ .len angles
                 fingers $ make-finders ([]) size length
-              {} (:angles angles) (:size size) (:fingers fingers)
+              app.schema/StoneState :origin origin :angles angles :size size :fingers fingers
           :examples $ []
-          :schema $ quote $ Fn Number
-            -> $ Map Tag Dynamic
+          :schema $ quote $ Fn Number (List Number) (-> app.schema/StoneState)
         'make-finders $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn make-finders (acc size depth)
             if (&<= depth 0) acc $ let
@@ -342,13 +324,14 @@
             when
               and dev? $ match op
                 (:states _ _) false
+                (:scene _) false
                 _ true
               println |dispatch! op
             reset! *store $ updater @*store op (make-id!)
               :timestamp $ shared/date-now-snapshot
             , &unit
           :examples $ []
-          :schema $ quote $ Fn Enum (-> Unit)
+          :schema $ quote $ Fn app.schema/Op (-> Unit)
         'load-font! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn load-font! (on-ready) (onFontReady on-ready) &unit
           :examples $ []
@@ -377,7 +360,14 @@
           :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
-            render! (comp-container @*store) dispatch! $ {}
+            render! (comp-container @*store)
+              fn (op)
+                if (enum? op)
+                  match (schema/decode-op op)
+                    (:some action) (dispatch! action)
+                    (:none) (println "|unknown op" op)
+                  raise |expected-quilling-event
+              {}
           :examples $ []
           :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
       :ns $ %{} 'NsEntry (:doc |)
@@ -395,23 +385,59 @@
       :defs $ {}
         'FlowerState $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct FlowerState
-            :origin $ quote $ List Number
-            :points $ quote $ List (List Number)
-            :show-control? 'Bool
+            :origin $ List Number
+            :points $ List $ List Number
+            :show-control? Bool
           :examples $ []
           :schema $ quote StructDef
+        'Op $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defenum Op (:add-x) (:tab Tag) (:toggle-keyboard) (:counted)
+            :states (List Dynamic) Dynamic
+            :scene app.schema/SceneState
+            :hydrate-storage $ Map Tag Dynamic
+          :examples $ []
+          :schema $ quote EnumDef
+        'SceneState $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defunion SceneState TabState FlowerState StoneState
+          :examples $ []
+          :schema $ quote UnionDef
         'StoneState $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct StoneState
-            :origin $ quote $ List Number
-            :angles $ quote $ List Number
-            :size 'Number
-            :fingers $ quote $ List Number
+            :origin $ List Number
+            :angles $ List Number
+            :size Number
+            :fingers $ List Number
           :examples $ []
           :schema $ quote StructDef
         'TabState $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defstruct TabState (:tab 'Tag)
+          :code $ quote $ defstruct TabState (:tab Tag)
           :examples $ []
           :schema $ quote StructDef
+        'decode-op $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn decode-op (op)
+            match op
+              (:add-x _)
+                Option :some $ Op :add-x
+              (:tab tab)
+                Option :some $ Op :tab $ decode-map-as tab Tag
+              (:toggle-keyboard _)
+                Option :some $ Op :toggle-keyboard
+              (:counted _)
+                Option :some $ Op :counted
+              (:states cursor data)
+                Option :some $ Op :states
+                  decode-map-as cursor $ List Dynamic
+                  , data
+              (:scene scene)
+                Option :some $ Op :scene $ decode-map-as scene app.schema/SceneState
+              (:hydrate-storage data)
+                if (map? data)
+                  Option :some $ Op :hydrate-storage $ decode-map-as data (Map Tag Dynamic)
+                  raise "|Stored application state must be a map"
+              _ $ Option :none
+          :examples $ []
+          :schema $ quote $ Fn AnyEnum
+            -> $ Option app.schema/Op
         'store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def store
             {} (:tab :drafts) (:x 0) (:keyboard-on? false) (:counted 0)
@@ -426,29 +452,30 @@
         %{} 'CodeEntry (:doc |)
           :code $ quote $ defn updater (store op op-id op-time)
             match op
-              (:add-x _)
+              (:add-x)
                 update store :x $ fn (raw)
                   let
                       x $ decode-map-as raw 'Number
                     if (> x 10) 0 $ + x 1
               (:tab tab) (assoc store :tab tab)
-              (:toggle-keyboard _)
+              (:toggle-keyboard)
                 update store :keyboard-on? $ fn (raw)
                   not $ decode-map-as raw 'Bool
-              (:counted _)
+              (:counted)
                 update store :counted $ fn (raw)
                   inc $ decode-map-as raw 'Number
-              (:states cursor data)
-                update-states store
-                  decode-map-as cursor $ :: 'List 'Dynamic
-                  , data
-              (:hydrate-storage data)
-                if (map? data)
-                  decode-map-as data $ :: 'Map 'Tag 'Dynamic
-                  raise "|Stored application state must be a map"
-              _ $ do (println "|unknown op" op) store
+              (:states cursor data) (update-states store cursor data)
+              (:scene scene)
+                match scene
+                  (app.schema/TabState state)
+                    update-states store ([]) (&struct:to-map state)
+                  (app.schema/FlowerState state)
+                    update-states store ([] :flower) (&struct:to-map state)
+                  (app.schema/StoneState state)
+                    update-states store ([] :stone) (&struct:to-map state)
+              (:hydrate-storage data) data
           :examples $ []
-          :schema $ quote $ Fn (Map Tag Dynamic) Enum String Number
+          :schema $ quote $ Fn (Map Tag Dynamic) app.schema/Op String Number
             -> $ Map Tag Dynamic
           :tests $ [] $ %{} 'TestEntry (:name |routes-state-cursor)
             :code $ quote $ assert=
@@ -457,7 +484,7 @@
                   {} $ :tab :flower
               updater
                 {} $ :states $ {}
-                :: :states ([] :flower)
+                app.schema/Op :states ([] :flower)
                   {} $ :tab :flower
                 , |op-1 1
       :ns $ %{} 'NsEntry (:doc |)
