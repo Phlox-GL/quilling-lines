@@ -93,6 +93,7 @@
                   graphics $ {} $ :ops
                     -> (:points state)
                       mapcat $ fn (point) (gen-trail point)
+                      map encode-draw-command
                   , & $ -> (:points state)
                     map-indexed $ fn (idx point)
                       comp-drag-point
@@ -161,6 +162,7 @@
                           stone-line
                             pow (&/ idx 30) 0.9
                             , points size
+                        map encode-draw-command
           :examples $ []
           :schema $ quote $ Fn (Map Tag Dynamic) (-> phlox.schema/PhloxElement) (:features :js-ffi)
         'comp-tabs $ %{} 'CodeEntry (:doc |)
@@ -180,6 +182,16 @@
                     d! $ app.schema/Op :scene $ app.schema/TabState :tab :stone
           :examples $ []
           :schema $ quote $ Fn (-> phlox.schema/PhloxElement)
+        'encode-draw-command $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn encode-draw-command (command)
+            match command
+              (:move-to point) (g :move-to point)
+              (:line-style style) (g :line-style style)
+              (:line-to point) (g :line-to point)
+          :examples $ []
+          :schema $ quote $ Fn app.schema/DrawCommand
+            -> $ List Dynamic
+            :features :js-ffi
         'gen-trail $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn gen-trail (point)
             let
@@ -191,8 +203,8 @@
                     ratio $ &/ r0 30
                     concat
                       []
-                        g :move-to $ [] 0 0
-                        g :line-style $ {}
+                        app.schema/DrawCommand :move-to $ [] 0 0
+                        app.schema/DrawCommand :line-style $ {}
                           :color $ hslx
                             &+ hue $ rand 80
                             &+ 50 $ rand 10
@@ -203,7 +215,7 @@
                         map $ fn (t0)
                           &let
                             theta $ &* &PI $ &- (&/ t0 60) 0.5
-                            [] :line-to $ c-times
+                            app.schema/DrawCommand :line-to $ c-times
                               c-times
                                 c-times point $ [] (cos theta)
                                   &* 0.66 $ sin theta
@@ -213,7 +225,7 @@
                                 , 0
           :examples $ []
           :schema $ quote $ Fn (List Number)
-            -> $ List $ List Dynamic
+            -> $ List app.schema/DrawCommand
         'half-pi $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def half-pi (&/ &PI 2)
           :examples $ []
@@ -279,8 +291,8 @@
           :code $ quote $ defn stone-line (ratio points size)
             concat
               []
-                g :move-to $ [] 0 0
-                g :line-style $ {}
+                app.schema/DrawCommand :move-to $ [] 0 0
+                app.schema/DrawCommand :line-style $ {}
                   :color $ hslx
                     &+ 200 $ rand 60
                     &+ 40 $ rand 20
@@ -295,12 +307,12 @@
                       (nth points (&- idx size))
                         , .unwrap
                       [] 0 0
-                  g :line-to $ ratio-between ratio relative p
+                  app.schema/DrawCommand :line-to $ ratio-between ratio relative p
           :examples $ []
           :schema $ quote $ Fn Number
             List $ List Number
             , Number
-              -> $ List $ List Dynamic
+              -> $ List app.schema/DrawCommand
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.container
           :require
@@ -383,6 +395,17 @@
             js-ffi.shared :as shared
     'app.schema $ %{} 'FileEntry
       :defs $ {}
+        'DrawCommand $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defenum DrawCommand
+            :move-to $ List Number
+            :line-style $ Map Tag app.schema/DrawStyleValue
+            :line-to $ List Number
+          :examples $ []
+          :schema $ quote EnumDef
+        'DrawStyleValue $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defunion DrawStyleValue Number Tag
+          :examples $ []
+          :schema $ quote UnionDef
         'FlowerState $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct FlowerState
             :origin $ List Number
@@ -438,6 +461,7 @@
           :examples $ []
           :schema $ quote $ Fn AnyEnum
             -> $ Option app.schema/Op
+            :open :decode
         'store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def store
             {} (:tab :drafts) (:x 0) (:keyboard-on? false) (:counted 0)
