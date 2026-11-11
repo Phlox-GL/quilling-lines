@@ -415,7 +415,7 @@
           :schema $ quote StructDef
         'Op $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defenum Op (:add-x) (:tab Tag) (:toggle-keyboard) (:counted)
-            :states (List Dynamic) Dynamic
+            :states (List Tag) Dynamic
             :scene app.schema/SceneState
             :hydrate-storage $ Map Tag Dynamic
           :examples $ []
@@ -449,7 +449,7 @@
                 Some $ Op :counted
               (:states cursor data)
                 Some $ Op :states
-                  decode-map-as cursor $ List Dynamic
+                  decode-map-as cursor $ List Tag
                   , data
               (:scene scene)
                 Some $ Op :scene $ decode-map-as scene app.schema/SceneState
