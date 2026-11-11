@@ -343,7 +343,7 @@
               :timestamp $ shared/date-now-snapshot
             , &unit
           :examples $ []
-          :schema $ quote $ Fn app.schema/Op (-> Unit)
+          :schema $ quote $ Fn schema/Op (-> Unit)
         'load-font! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn load-font! (on-ready) (onFontReady on-ready) &unit
           :examples $ []
@@ -361,7 +361,7 @@
           :code $ quote $ defn make-id! ()
             let
                 value $ shortid/generate
-              if (string? value) (assert-type value 'String) (raise "|shortid returned a non-string")
+              if (string? value) (assert-type value String) (raise "|shortid returned a non-string")
           :examples $ []
           :schema $ quote $ Fn (-> String) (:features :js-ffi)
         'reload! $ %{} 'CodeEntry (:doc |)
@@ -440,27 +440,27 @@
           :code $ quote $ defn decode-op (op)
             match op
               (:add-x _)
-                Option :some $ Op :add-x
+                Some $ Op :add-x
               (:tab tab)
-                Option :some $ Op :tab $ decode-map-as tab Tag
+                Some $ Op :tab $ decode-map-as tab Tag
               (:toggle-keyboard _)
-                Option :some $ Op :toggle-keyboard
+                Some $ Op :toggle-keyboard
               (:counted _)
-                Option :some $ Op :counted
+                Some $ Op :counted
               (:states cursor data)
-                Option :some $ Op :states
+                Some $ Op :states
                   decode-map-as cursor $ List Dynamic
                   , data
               (:scene scene)
-                Option :some $ Op :scene $ decode-map-as scene app.schema/SceneState
+                Some $ Op :scene $ decode-map-as scene app.schema/SceneState
               (:hydrate-storage data)
                 if (map? data)
-                  Option :some $ Op :hydrate-storage $ decode-map-as data (Map Tag Dynamic)
+                  Some $ Op :hydrate-storage $ decode-map-as data (Map Tag Dynamic)
                   raise "|Stored application state must be a map"
-              _ $ Option :none
+              _ None
           :examples $ []
           :schema $ quote $ Fn AnyEnum
-            -> $ Option app.schema/Op
+            -> $ Option Op
             :open :decode
         'store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def store
