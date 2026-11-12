@@ -343,7 +343,7 @@
               :timestamp $ shared/date-now-snapshot
             , &unit
           :examples $ []
-          :schema $ quote $ Fn schema/Op (-> Unit)
+          :schema $ quote $ Fn schema/Op (-> Unit) (:features :io :state)
         'load-font! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn load-font! (on-ready) (onFontReady on-ready) &unit
           :examples $ []
@@ -356,7 +356,7 @@
             add-watch! *store :change $ fn (store prev) (render-app!)
             println "|App Started"
           :examples $ []
-          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn (-> Unit) (:features :io :js-ffi :state)
         'make-id! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn make-id! ()
             let
@@ -369,7 +369,7 @@
             add-watch! *store :change $ fn (store prev) (render-app!)
             render-app!
           :examples $ []
-          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn (-> Unit) (:features :io :js-ffi :state)
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
             render! (comp-container @*store)
@@ -381,7 +381,7 @@
                   raise |expected-quilling-event
               {}
           :examples $ []
-          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn (-> Unit) (:features :io :js-ffi :state)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
           :require (|pixi.js :as PIXI)
