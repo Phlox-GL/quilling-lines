@@ -479,7 +479,7 @@
               :states $ {}
               :cursor $ []
           :examples $ []
-          :schema $ quote $ Map Tag app.schema/InitialStoreField
+          :schema $ quote $ Map Tag InitialStoreField
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.schema
     'app.updater $ %{} 'FileEntry
