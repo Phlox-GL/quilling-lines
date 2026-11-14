@@ -164,7 +164,7 @@
                             , points size
                         map encode-draw-command
           :examples $ []
-          :schema $ quote $ Fn (Map Tag V) (-> phlox.schema/PhloxElement) (:generics V) (:features :js-ffi)
+          :schema $ quote $ Fn (Map Tag V) (-> phlox.schema/PhloxElement) (:generics V) (:features :js-ffi :state)
         'comp-tabs $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-tabs ()
             container ({})
@@ -181,7 +181,7 @@
                   fn (e d!)
                     d! $ app.schema/Op :scene $ app.schema/TabState :tab :stone
           :examples $ []
-          :schema $ quote $ Fn (-> phlox.schema/PhloxElement)
+          :schema $ quote $ Fn (-> phlox.schema/PhloxElement) (:features :state)
         'encode-draw-command $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn encode-draw-command (command)
             decode-map-as
