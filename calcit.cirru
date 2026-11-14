@@ -76,7 +76,7 @@
                   :on $ {} $ :pointertap
                     fn (e d!) (js/document.body.requestFullscreen)
           :examples $ []
-          :schema $ quote $ Fn (Map Tag Dynamic) (-> phlox.schema/PhloxElement) (:features :js-ffi)
+          :schema $ quote $ Fn (Map Tag V) (-> phlox.schema/PhloxElement) (:generics V) (:features :js-ffi)
         'comp-flower $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-flower (states)
             let
@@ -117,7 +117,7 @@
                     :radius 10
                     :alpha 0.5
           :examples $ []
-          :schema $ quote $ Fn (Map Tag Dynamic) (-> phlox.schema/PhloxElement) (:features :js-ffi)
+          :schema $ quote $ Fn (Map Tag V) (-> phlox.schema/PhloxElement) (:generics V) (:features :js-ffi)
         'comp-stone $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-stone (states)
             let
@@ -164,7 +164,7 @@
                             , points size
                         map encode-draw-command
           :examples $ []
-          :schema $ quote $ Fn (Map Tag Dynamic) (-> phlox.schema/PhloxElement) (:features :js-ffi)
+          :schema $ quote $ Fn (Map Tag V) (-> phlox.schema/PhloxElement) (:generics V) (:features :js-ffi)
         'comp-tabs $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-tabs ()
             container ({})
@@ -184,13 +184,15 @@
           :schema $ quote $ Fn (-> phlox.schema/PhloxElement)
         'encode-draw-command $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn encode-draw-command (command)
-            match command
-              (:move-to point) (g :move-to point)
-              (:line-style style) (g :line-style style)
-              (:line-to point) (g :line-to point)
+            decode-map-as
+              match command
+                (:move-to point) (g :move-to point)
+                (:line-style style) (g :line-style style)
+                (:line-to point) (g :line-to point)
+              Tuple Tag app.schema/DrawPayload
           :examples $ []
           :schema $ quote $ Fn app.schema/DrawCommand
-            -> $ List Dynamic
+            -> $ Tuple Tag app.schema/DrawPayload
             :features :js-ffi
         'gen-trail $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn gen-trail (point)
@@ -402,6 +404,10 @@
             :line-to $ List Number
           :examples $ []
           :schema $ quote EnumDef
+        'DrawPayload $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defunion DrawPayload (List Number) (Map Tag app.schema/DrawStyleValue)
+          :examples $ []
+          :schema $ quote UnionDef
         'DrawStyleValue $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defunion DrawStyleValue Number Tag
           :examples $ []
