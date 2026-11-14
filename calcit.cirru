@@ -419,6 +419,11 @@
             :show-control? Bool
           :examples $ []
           :schema $ quote StructDef
+        'InitialStoreField $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defunion InitialStoreField Tag Number Bool
+            Map Tag $ List Tag
+            List Tag
+          :examples $ []
         'Op $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defenum Op (:add-x) (:tab Tag) (:toggle-keyboard) (:counted)
             :states (List Tag) Dynamic
@@ -474,7 +479,7 @@
               :states $ {}
               :cursor $ []
           :examples $ []
-          :schema $ quote $ Map Tag Dynamic
+          :schema $ quote $ Map Tag InitialStoreField
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.schema
     'app.updater $ %{} 'FileEntry
@@ -483,17 +488,23 @@
           :code $ quote $ defn updater (store op op-id op-time)
             match op
               (:add-x)
-                update store :x $ fn (raw)
-                  let
-                      x $ decode-map-as raw 'Number
-                    if (> x 10) 0 $ + x 1
+                match (get store :x)
+                  (:none) store
+                  (:some raw)
+                    let
+                        x $ decode-map-as raw Number
+                      assoc store :x $ if (> x 10) 0 $ + x 1
               (:tab tab) (assoc store :tab tab)
               (:toggle-keyboard)
-                update store :keyboard-on? $ fn (raw)
-                  not $ decode-map-as raw 'Bool
+                match (get store :keyboard-on?)
+                  (:none) store
+                  (:some raw)
+                    assoc store :keyboard-on? $ not $ decode-map-as raw Bool
               (:counted)
-                update store :counted $ fn (raw)
-                  inc $ decode-map-as raw 'Number
+                match (get store :counted)
+                  (:none) store
+                  (:some raw)
+                    assoc store :counted $ inc $ decode-map-as raw Number
               (:states cursor data) (update-states store cursor data)
               (:scene scene)
                 match scene
@@ -505,8 +516,9 @@
                     update-states store ([] :stone) (&struct:to-map state)
               (:hydrate-storage data) data
           :examples $ []
-          :schema $ quote $ Fn (Map Tag Dynamic) app.schema/Op String Number
+          :schema $ quote $ Fn (Map Tag StoreValue) app.schema/Op String Number
             -> $ Map Tag Dynamic
+            :generics StoreValue
           :tests $ [] $ %{} 'TestEntry (:name |routes-state-cursor)
             :code $ quote $ assert=
               {} $ :states $ {}
