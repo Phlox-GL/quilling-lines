@@ -419,6 +419,11 @@
             :show-control? Bool
           :examples $ []
           :schema $ quote StructDef
+        'InitialStoreField $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defunion InitialStoreField Tag Number Bool
+            Map Tag $ List Tag
+            List Tag
+          :examples $ []
         'Op $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defenum Op (:add-x) (:tab Tag) (:toggle-keyboard) (:counted)
             :states (List Tag) Dynamic
@@ -474,7 +479,7 @@
               :states $ {}
               :cursor $ []
           :examples $ []
-          :schema $ quote $ Map Tag Dynamic
+          :schema $ quote $ Map Tag app.schema/InitialStoreField
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.schema
     'app.updater $ %{} 'FileEntry
