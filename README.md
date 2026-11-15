@@ -8,7 +8,7 @@ Previews http://r.tiye.me/Quamolit/quilling-lines/ .
 
 本地开发配对正式 Calcit 和 `@calcit/procs` 0.42.1。升级后请重装依赖、重建并刷新。Flower 拖点、Stone Reset、默认 Stone 页面和前端部署路径保持原行为。绘图命令在场景内部使用具名类型，传给 Phlox 的命令列表保持原格式。
 
-依赖使用 Phlox 0.9.3，传递依赖为 Touch Control 0.0.39、JS FFI 0.2.13 和 Pointed Prompt 0.0.27。应用操作使用具名 `Op`。标签页、Flower 与 Stone 的状态通过 `SceneState` union 派发，写入原组件游标位置；Phlox 的匿名游标操作在渲染入口解码。组件显式处理有无状态，Stone 在缺失数据时才生成初始随机参数。
+依赖使用 Phlox 0.9.5，传递依赖为 Touch Control 0.0.39、JS FFI 0.2.13 和 Pointed Prompt 0.0.27。应用操作使用具名 `Op`。标签页、Flower 与 Stone 的状态通过 `SceneState` union 派发，写入原组件游标位置；Phlox 的匿名游标操作在渲染入口解码。组件显式处理有无状态，Stone 在缺失数据时才生成初始随机参数。
 
 原 3 项测试、全量与完整 strict 门禁继续运行。IAB 的历史图形可见性问题见 [Phlox #71](https://github.com/Phlox-GL/phlox/issues/71)。
 
