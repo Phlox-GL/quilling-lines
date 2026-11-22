@@ -76,7 +76,7 @@
                   :on $ {} $ :pointertap
                     fn (e d!) (js/document.body.requestFullscreen)
           :examples $ []
-          :schema $ quote $ Fn (Map Tag V) (-> phlox.schema/PhloxElement) (:generics V) (:features :js-ffi)
+          :schema $ quote $ Fn (Map Tag V) (-> phlox.schema/PhloxElement) (:generics V) (:features :js-ffi :state)
         'comp-flower $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-flower (states)
             let
@@ -350,7 +350,7 @@
           :code $ quote $ defn load-font! (on-ready) (onFontReady on-ready) &unit
           :examples $ []
           :schema $ quote $ Fn
-            Fn $ -> Unit
+            Fn (-> Unit) (:features :io :js-ffi :state)
             -> Unit
             :features :js-ffi
         'main! $ %{} 'CodeEntry (:doc |)
