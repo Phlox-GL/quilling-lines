@@ -6,9 +6,9 @@ Previews http://r.tiye.me/Quamolit/quilling-lines/ .
 
 ### 使用者需要注意
 
-本地开发配对正式 Calcit 和 `@calcit/procs` 0.44.0。升级后请重装依赖、重建并刷新。Flower 拖点、Stone Reset、默认 Stone 页面和前端部署路径保持原行为。Flower 轨迹使用 Phlox 的具名 PathOp，gen-trail 的返回类型相应收紧；Stone 保留原绘图命令以维持线段连接和端点样式。传给渲染器的命令布局保持原格式。
+本地开发配对正式 Calcit 和 `@calcit/procs` 0.44.0。升级后请重装依赖、重建并刷新。Flower 拖点、Stone Reset、默认 Stone 页面和前端部署路径保持原行为。Flower 轨迹和 Stone 绘图使用 Phlox 的具名 PathOp，保留线段连接、端点样式和随机调用顺序。传给渲染器的命令布局保持原格式。
 
-依赖使用 Phlox 0.11.0，传递依赖为 Touch Control 0.0.43、JS FFI 0.2.19 和 Pointed Prompt 0.0.30。应用操作使用具名 `Op`。标签页、Flower 与 Stone 的状态通过 `SceneState` union 派发，写入原组件游标位置；Phlox 的匿名游标操作在渲染入口解码。组件显式处理有无状态，Stone 在缺失数据时才生成初始随机参数。
+依赖使用 Phlox 0.12.0，传递依赖为 Touch Control 0.0.43、JS FFI 0.2.19 和 Pointed Prompt 0.0.30。应用操作使用具名 `Op`。标签页、Flower 与 Stone 的状态通过 `SceneState` union 派发，写入原组件游标位置；Phlox 的匿名游标操作在渲染入口解码。组件显式处理有无状态，Stone 在缺失数据时才生成初始随机参数。
 
 原 3 项测试、全量与完整 strict 门禁继续运行。IAB 的历史图形可见性问题见 [Phlox #71](https://github.com/Phlox-GL/phlox/issues/71)。
 
