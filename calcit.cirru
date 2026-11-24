@@ -90,10 +90,9 @@
                 {} $ :position $ [] 40 40
                 container
                   {} $ :position $ :origin state
-                  graphics $ {} $ :ops
-                    -> (:points state)
-                      mapcat $ fn (point) (gen-trail point)
-                      map encode-draw-command
+                  phlox.core/path-graphics-with ({})
+                    mapcat (:points state)
+                      fn (point) (gen-trail point)
                   , & $ -> (:points state)
                     map-indexed $ fn (idx point)
                       comp-drag-point
@@ -205,19 +204,18 @@
                     ratio $ &/ r0 30
                     concat
                       []
-                        app.schema/DrawCommand :move-to $ [] 0 0
-                        app.schema/DrawCommand :line-style $ {}
-                          :color $ hslx
+                        phlox.schema/PathOp :move-to $ [] 0 0
+                        phlox.schema/PathOp :line-style
+                          hslx
                             &+ hue $ rand 80
                             &+ 50 $ rand 10
                             &+ light $ rand 10
-                          :width 1
-                          :alpha 1
+                          , 1 1
                       -> (range 60)
                         map $ fn (t0)
                           &let
                             theta $ &* &PI $ &- (&/ t0 60) 0.5
-                            app.schema/DrawCommand :line-to $ c-times
+                            phlox.schema/PathOp :line-to $ c-times
                               c-times
                                 c-times point $ [] (cos theta)
                                   &* 0.66 $ sin theta
@@ -227,7 +225,7 @@
                                 , 0
           :examples $ []
           :schema $ quote $ Fn (List Number)
-            -> $ List app.schema/DrawCommand
+            -> $ List phlox.schema/PathOp
         'half-pi $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def half-pi (&/ &PI 2)
           :examples $ []
