@@ -155,13 +155,12 @@
                           , point
                   container
                     {} $ :position $ :origin state
-                    graphics $ {} $ :ops
-                      -> (range 30)
-                        mapcat $ fn (idx)
+                    phlox.core/path-graphics-with ({})
+                      mapcat (range 30)
+                        fn (idx)
                           stone-line
                             pow (&/ idx 30) 0.9
                             , points size
-                        map encode-draw-command
           :examples $ []
           :schema $ quote $ Fn (Map Tag V) (-> phlox.schema/PhloxElement) (:generics V) (:features :js-ffi :state)
         'comp-tabs $ %{} 'CodeEntry (:doc |)
@@ -291,28 +290,26 @@
           :code $ quote $ defn stone-line (ratio points size)
             concat
               []
-                app.schema/DrawCommand :move-to $ [] 0 0
-                app.schema/DrawCommand :line-style $ {}
-                  :color $ hslx
+                phlox.schema/PathOp :move-to $ [] 0 0
+                phlox.schema/PathOp :line-style-with
+                  hslx
                     &+ 200 $ rand 60
                     &+ 40 $ rand 20
                     &+ 64 $ rand 20
-                  :width $ &+ 1 $ rand-int 6
-                  :alpha 0.8
-                  :join :round
-                  :cap :round
+                  &+ 1 $ rand-int 6
+                  , 0.8 (phlox.schema/LineJoin :round) (phlox.schema/LineCap :round)
               -> points $ map-indexed $ fn (idx p)
                 let
                     relative $ if (&>= idx size)
                       (nth points (&- idx size))
                         , .unwrap
                       [] 0 0
-                  app.schema/DrawCommand :line-to $ ratio-between ratio relative p
+                  phlox.schema/PathOp :line-to $ ratio-between ratio relative p
           :examples $ []
           :schema $ quote $ Fn Number
             List $ List Number
             , Number
-              -> $ List app.schema/DrawCommand
+              -> $ List phlox.schema/PathOp
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.container
           :require
