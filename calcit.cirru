@@ -419,6 +419,7 @@
             Map Tag $ List Tag
             List Tag
           :examples $ []
+          :schema $ quote UnionDef
         'Op $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defenum Op (:add-x) (:tab Tag) (:toggle-keyboard) (:counted)
             :states (List Tag) Dynamic
